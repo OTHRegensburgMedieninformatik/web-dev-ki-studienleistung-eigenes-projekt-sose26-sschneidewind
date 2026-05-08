@@ -1,0 +1,43 @@
+{{> menu id="/" name=name surname=surname}}
+
+<div class="container-fluid">
+    <div class="card mt-3">
+        <div class="card-header">
+            <h2>Profile of {{name}} {{surname}}</h2>
+        </div>
+        <div class="card-body">
+            <form action="/change_profile_attributes" method="POST">
+                <div class="mb-3">
+                    <label for="inputName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="inputName" name="name" value="{{name}}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputSurname" class="form-label">Surname</label>
+                    <input type="text" class="form-control" id="inputSurname" name="surname" value="{{surname}}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="inputEmail" name="email" value="{{email}}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputStreet" class="form-label">Full Adress</label>
+                    <input type="text" class="form-control" id="inputStreet" name="street" value="{{street}}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputCity" class="form-label">Postal Code and City</label>
+                    <input type="text" class="form-control" id="inputCity" name="city" value="{{city}}">
+                </div>
+                <div class="mb-3">
+                    <label for="inputCountry" class="form-label">Country</label>
+                    <input type="text" class="form-control" id="inputCountry" name="country" value="{{country}}">
+                </div>
+                <div class="mb-5"></div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Current Password for verification</label>
+                    <input type="password" class="form-control" id="inputPassword" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Change Information</button>
+            </form>
+        </div>
+    </div>
+</div>

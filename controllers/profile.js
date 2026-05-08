@@ -4,9 +4,10 @@ const profile = {
   index(request, response) {
     logger.info("Rendering customer profile for " + request.session.name);
     const viewData = {
-        title: "Customer Profile",
+        title: "Profile of " + request.session.name,
         signed_in: request.session.signed_in,
         name: request.session.name,
+      surname: request.session.surname,
         restaurant_reviews: [
             {restaurant: "Luigis Pizzeria", stars: 5, string: "Great Pizza, great service, great Everything!"},
             {restaurant: "Marios Nudel Restaurant", stars: 4, string: "great soup soup soup"},
@@ -20,6 +21,19 @@ const profile = {
     };
     response.render("profile", viewData);
   },
+  settings(request, response){
+    logger.info("Rendering profile settings");
+    const viewData = {
+      title: "Settings",
+      name: request.session.name,
+      surname: request.session.surname,
+      email: request.session.email,
+      street: request.session.street,
+      city: request.session.city,
+      country: request.session.country,
+    };
+    response.render("profile_settings", viewData);
+  }
 };
 
 module.exports = profile;

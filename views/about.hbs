@@ -1,5 +1,5 @@
 {{#if signed_in}}
-  {{> menu id="about" name=name}}
+  {{> menu id="/" name=name surname=surname}}
 {{else}}
   {{> welcomemenu id="about"}}
 {{/if}}
@@ -8,7 +8,7 @@
   <div class="border p-2 my-2">
     <h3>Critical Restaurant</h3>
     <p>
-      {{#if name}}{{name}}{{else}}Hey{{/if}}, have you ever been disappointed after trying a new restaurant? Have you ever thought to yourself "Wow, this place was really amazing, I wish I could tell the whole world!"?
+      {{#if name}}{{name}} {{surname}}{{else}}Hey{{/if}}, have you ever been disappointed after trying a new restaurant? Have you ever thought to yourself "Wow, this place was really amazing, I wish I could tell the whole world!"?
     </p>
     <p>
       If you said yes to one of these questions, then look no further! This small web app can satisfy all your rating and ranking needs concerning food establishments in your area!

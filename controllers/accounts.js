@@ -15,19 +15,30 @@ const accounts = {
 
     register(request, response) {
         request.session.signed_in = true;
-        request.session.name = "Max Mustermann";
+        request.session.name = "Max";
+        request.session.surname = "Mustermann"
+        request.session.email = "maxmustermann@gmail.com",
+        request.session.street = "Palmenweg 3",
+        request.session.city = "93051 Regensburg",
+        request.session.country = "Germany",
         response.redirect("/");
     },
 
     logout(request, response) {
         request.session.signed_in = false;
         request.session.name = undefined;
+        request.session.surname = undefined;
         response.redirect("/");
     },
 
     authenticate(request, response) {
         request.session.signed_in = true;
-        request.session.name = "Max Mustermann";
+        request.session.name = "Max";
+        request.session.surname = "Mustermann"
+        request.session.email = "maxmustermann@gmail.com",
+        request.session.street = "Palmenweg 3",
+        request.session.city = "93051 Regensburg",
+        request.session.country = "Germany",
         response.redirect("/");
     },
 }

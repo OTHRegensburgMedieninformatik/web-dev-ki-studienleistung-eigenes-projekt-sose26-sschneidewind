@@ -6,7 +6,8 @@ const home = {
     const viewData = {
       title: "Critical Restaurant",
       signed_in: request.session.signed_in,
-      name: request.session.name
+      name: request.session.name,
+      surname: request.session.surname
     };
     response.render("home", viewData);
   },
