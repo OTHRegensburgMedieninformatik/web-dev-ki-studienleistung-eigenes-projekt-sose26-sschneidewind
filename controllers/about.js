@@ -5,7 +5,8 @@ const about = {
     logger.info("about rendering");
     const viewData = {
       title: "About Critical Restaurant",
-      signed_in: request.session.signed_in
+      signed_in: request.session.signed_in,
+      name: request.session.name
     };
     response.render("about", viewData);
   }

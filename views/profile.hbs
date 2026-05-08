@@ -1,0 +1,58 @@
+{{> menu id="customer_profile" name=name}}
+
+<div class="container-fluid">
+
+    <div class="card mt-3">
+        <div class="card-header">
+            <h2>Profile of {{name}}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-5">
+                    <h4>Restaurant Reviews</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Restaurant</th>
+                                <th>Sterne</th>
+                                <th>Fließtext</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#each restaurant_reviews}}
+                            <tr>
+                                <td>{{restaurant}}</td>
+                                <td>{{stars}}</td>
+                                <td>{{string}}</td>
+                            </tr>
+                        </tbody>
+                        {{/each}}
+                    </table>
+                </div>
+                <div class="col-7">
+                    <h4>Dish Reviews</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Restaurant</th>
+                                <th>Dish</th>
+                                <th>Sterne</th>
+                                <th>Fließtext</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#each dish_reviews}}
+                            <tr>
+                                <td>{{restaurant}}</td>
+                                <td>{{dish}}</td>
+                                <td>{{stars}}</td>
+                                <td>{{string}}</td>
+                            </tr>
+                        </tbody>
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
