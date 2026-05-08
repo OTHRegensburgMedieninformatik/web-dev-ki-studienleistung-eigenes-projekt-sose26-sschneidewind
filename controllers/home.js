@@ -4,9 +4,10 @@ const home = {
   index(request, response) {
     logger.info("home rendering");
     const viewData = {
-      title: "Welcome to the Web app template!"
+      title: "Critical Restaurant",
+      signed_in: request.session.signed_in
     };
-    response.render("index", viewData);
+    response.render("home", viewData);
   },
 };
 

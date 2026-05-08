@@ -4,7 +4,8 @@ const about = {
   index(request, response) {
     logger.info("about rendering");
     const viewData = {
-      title: "About Web app template"
+      title: "About Critical Restaurant",
+      signed_in: request.session.signed_in
     };
     response.render("about", viewData);
   }
