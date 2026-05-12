@@ -1,40 +1,47 @@
-{{> welcomemenu id="signup"}}
+<body>
 
-<div class="container mx-auto">
-    <div class="card mt-3">
-        <div class="card-header"><h3>Sign up!</h3></div>
-        <div class="card-body">
-            <form action="/register" method="POST">
-                <div class="mb-3">
-                    <label for="inputFirstName" class="form-label">First name</label>
-                    <input type="text" class="form-control" id="inputFirstName" name="firstName">
+    {{> welcomemenu id='signup' }}
+
+    <main>
+        <div class="container mx-auto">
+            <div class="card mt-3">
+                <div class="card-header"><h3>Sign up!</h3></div>
+                <div class="card-body">
+                    <form action="/register" method="POST">
+                        <div class="mb-3">
+                            <label for="inputFirstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="inputFirstName" name="firstName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputLastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="inputLastName" name="lastName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputStreet" class="form-label">Full Adress</label>
+                            <input type="text" class="form-control" id="inputStreet" name="street" value="{{street}}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputCity" class="form-label">City and Postal Code</label>
+                            <input type="text" class="form-control" id="inputCity" name="city" value="{{city}}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputCountry" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="inputCountry" name="country" value="{{country}}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="inputEmail" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="inputPassword" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="inputLastName" class="form-label">Last name</label>
-                    <input type="text" class="form-control" id="inputLastName" name="lastName">
-                </div>
-                <div class="mb-3">
-                    <label for="inputStreet" class="form-label">Full Adress</label>
-                    <input type="text" class="form-control" id="inputStreet" name="street" value="{{street}}">
-                </div>
-                <div class="mb-3">
-                    <label for="inputCity" class="form-label">City and Postal Code</label>
-                    <input type="text" class="form-control" id="inputCity" name="city" value="{{city}}">
-                </div>
-                <div class="mb-3">
-                    <label for="inputCountry" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="inputCountry" name="country" value="{{country}}">
-                </div>
-                <div class="mb-3">
-                    <label for="inputEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email">
-                </div>
-                <div class="mb-3">
-                    <label for="inputPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" name="password">
-                </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </main>
+
+    {{>footer}}
+</body>

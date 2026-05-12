@@ -1,20 +1,28 @@
-{{> welcomemenu id='login' }}
+<body>
 
-<div class="container mx-auto">
-    <div class="card mt-3">
-        <div class="card-header"><h3>Log-in</h3></div>
-        <div class="card-body">
-            <form action="/authenticate" method="POST">
-                <div class="mb-3">
-                    <label for="inputEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email">
+    {{> welcomemenu id='login' }}
+
+    <main>
+        <div class="container mx-auto">
+            <div class="card mt-3">
+                <div class="card-header"><h3>Log-in</h3></div>
+                <div class="card-body">
+                    <form action="/authenticate" method="POST">
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="inputEmail" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="inputPassword" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="inputPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" name="password">
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </main>
+
+    {{>footer}}
+
+</body>

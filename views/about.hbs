@@ -1,25 +1,34 @@
-{{#if signed_in}}
-  {{> menu id="/" name=name surname=surname}}
-{{else}}
-  {{> welcomemenu id="about"}}
-{{/if}}
+<body>
 
-<div class="container">
-  <div class="border p-2 my-2">
-    <h3>Critical Restaurant</h3>
-    <p>
-      {{#if name}}{{name}} {{surname}}{{else}}Hey{{/if}}, have you ever been disappointed after trying a new restaurant? Have you ever thought to yourself "Wow, this place was really amazing, I wish I could tell the whole world!"?
-    </p>
-    <p>
-      If you said yes to one of these questions, then look no further! This small web app can satisfy all your rating and ranking needs concerning food establishments in your area!
-    </p>
+  {{#if signed_in}}
+    {{> menu id="/" name=name surname=surname}}
+  {{else}}
+    {{> welcomemenu id="about"}}
+  {{/if}}
 
-    <p>
-      Features include:
-      <ul>
-        <li>The ability to review all past experiences in restaurants (verfication of stay will be added and mandatory in a later update)</li>
-        <li>A list of all restaurants in your area, ordered by ratings of other people</li>
-      </ul>
-    </p>
-  </div>
-</div>  
+  <main>
+    <div class="container">
+      <div class="border p-2 my-2">
+        <h3>Critical Restaurant</h3>
+        <p>
+          {{#if name}}{{name}} {{surname}}{{else}}Hey{{/if}}, have you ever been disappointed after trying a new restaurant? Have you ever thought to yourself "Wow, this place was really amazing, I wish I could tell the whole world!"?
+        </p>
+        <p>
+          If you said yes to one of these questions, then look no further! This small web app can satisfy all your rating and ranking needs concerning food establishments in your area!
+        </p>
+
+        <p>
+          Features include:
+          <ul>
+            <li>The ability to review all past experiences in restaurants (verfication of stay will be added and mandatory in a later update)</li>
+            <li>A list of all restaurants in your area, ordered by ratings of other people</li>
+          </ul>
+        </p>
+      </div>
+    </div>  
+  </main>
+  
+  {{>footer}}
+
+</body>
+

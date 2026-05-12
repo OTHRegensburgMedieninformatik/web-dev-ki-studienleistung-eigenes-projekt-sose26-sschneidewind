@@ -15,5 +15,6 @@ router.get("/logout", accounts.logout);
 router.post("/authenticate", accounts.authenticate);
 router.get("/profile", profile.index);
 router.get("/profile_settings", profile.settings);
+router.post("/change_profile_attributes", profile.change_attributes)
 
 module.exports = router;
