@@ -7,18 +7,68 @@
   {{/if}}
 
   <main>
-    <div class="container-fluid">
-      <div class="card mt-3">
+    <div class="container-fluid h-100">
+      <div class="card mt-3 h-100">
         <div class="card-header">
             <h3>{{title}}</h3>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-3">
-              <p class="card-text">A Website where YOU can rate your favourite places, connect with others and decide on your upcoming culinary adventures!</p>
+        <div class="card-body h-100 d-flex flex-column">
+          <div class="row flex-grow-1 h-100">
+            <div class="col-4 text-center border-end d-flex flex-column justify-content-between h-100">
+              <div>
+                <p class="card-text">A Website where YOU can rate your favourite places, connect with others and decide on your upcoming culinary adventures!</p>
+              </div>
+              <div>
+                {{#if signed_in}}
+                <h4>Top Restaurants near you:</h4>
+                {{else}}
+                <h4>Global Top Restaurants:</h4>
+                {{/if}}
+                <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Place</th>
+                          <th>Restaurant</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {{#each restaurants}}
+                      <tr>
+                          <td>{{place}}.</td>
+                          <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                {{#if signed_in}}
+                <h4>Top Dishes near you:</h4>
+                {{else}}
+                <h4>Global Top Dishes:</h4>
+                {{/if}}
+                <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Place</th>
+                          <th>Restaurant</th>
+                          <th>Dish</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {{#each dishes}}
+                      <tr>
+                          <td>{{place}}.</td>
+                          <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
+                          <td><a id="dish_{{place}}" href="/restaurant/{{rest_id}}/{{dish_id}}">{{dish}}</a></td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="col-9">
-              <img src="/images/regensburg_map.png">
+            <div class="col-8 text-center ">
+              <img src="/images/regensburg_map.png" class="h-100">
             </div>
           </div>
         </div>
