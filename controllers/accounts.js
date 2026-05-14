@@ -21,7 +21,7 @@ const accounts = {
         request.session.street = "Palmenweg 3",
         request.session.city = "93051 Regensburg",
         request.session.country = "Germany",
-        response.redirect("/");
+        response.redirect(request.session.last_url);
     },
 
     logout(request, response) {
@@ -39,7 +39,7 @@ const accounts = {
         request.session.street = "Palmenweg 3",
         request.session.city = "93051 Regensburg",
         request.session.country = "Germany",
-        response.redirect("/");
+        response.redirect(request.session.last_url);
     },
 }
 

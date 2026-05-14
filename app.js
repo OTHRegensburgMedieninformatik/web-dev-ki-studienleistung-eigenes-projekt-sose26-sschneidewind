@@ -1,5 +1,6 @@
 const express = require("express");
 const logger = require("./utils/logger");
+const stars = require("./utils/stars");
 const handlebars = require("express-handlebars");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -7,9 +8,16 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const hbs = handlebars.create({
+    extname: '.hbs',
+    helpers: {
+        stars: stars.get_stars
+    }
+});
+
 const app = express();
 
-app.engine('.hbs', handlebars.engine({extname: '.hbs'}));
+app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 app.set('views', './views');
 

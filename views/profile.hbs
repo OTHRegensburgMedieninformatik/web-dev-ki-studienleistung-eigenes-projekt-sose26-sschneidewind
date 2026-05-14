@@ -22,8 +22,8 @@
                                 <tbody>
                                 {{#each restaurant_reviews}}
                                     <tr>
-                                        <td>{{restaurant}}</td>
-                                        <td>{{stars}}</td>
+                                        <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
+                                        <td>{{{stars stars}}}</td>
                                         <td>{{string}}</td>
                                     </tr>
                                 </tbody>
@@ -44,9 +44,9 @@
                                 <tbody>
                                 {{#each dish_reviews}}
                                     <tr>
-                                        <td>{{restaurant}}</td>
-                                        <td>{{dish}}</td>
-                                        <td>{{stars}}</td>
+                                        <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
+                                        <td><a id="dish_{{place}}" href="/restaurant/{{rest_id}}/dish/{{dish_id}}">{{dish}}</a></td>
+                                        <td style="white-space: nowrap;">{{{stars stars}}}</td>
                                         <td>{{string}}</td>
                                     </tr>
                                 </tbody>

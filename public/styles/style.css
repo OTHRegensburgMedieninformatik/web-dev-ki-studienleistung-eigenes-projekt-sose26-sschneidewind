@@ -11,3 +11,62 @@ body {
 main {
     flex: 1;
 }
+
+.restaurant_image {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    object-fit: cover;
+    display: block;
+}
+
+.dish_container {
+    width: 180px;
+    height: 180px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.dish_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.dish_details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 180px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.dish_name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.dish_price {
+    font-size: 22px;
+    color: #444;
+    font-style: italic;
+}
+
+.dish_description {
+    font-size: 22px;
+    color: #888;
+}
+
+.dish_stars{
+    font-size: 40px;
+}
+
+.dish_stars_container {
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: middle;
+    height: 180px;
+    text-align: center;
+}

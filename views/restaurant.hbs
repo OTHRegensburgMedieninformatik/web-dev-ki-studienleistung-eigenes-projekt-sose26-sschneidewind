@@ -1,0 +1,55 @@
+<body>
+
+  {{#if signed_in}}
+    {{> menu id="/" name=name surname=surname}}
+  {{else}}
+    {{> welcomemenu id="about"}}
+  {{/if}}
+
+  <main>
+    <div class="container-fluid">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>{{restaurant_name}} {{{stars restaurant_stars}}}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-3 d-flex align-items-center justify-content-center">
+                        <img class="restaurant_image" src="{{restaurant_image}}">
+                    </div>
+                    <div class="col-9 d-flex flex-column align-items-center justify-content-center">
+                        <table class="table table-bordered">
+                            <tbody>
+                                {{#each restaurant_dishes}}
+                                <tr>
+                                    <td style="width:140px;"> 
+                                        <div class="dish_container">
+                                            <img class="dish_image" src="{{dish_picture}}">
+                                        </div>
+                                    </td>
+                                    <td class="dish_details">
+                                        <p class="dish_name">{{dish_name}}</p>
+                                        <p class="dish_price">{{price}}€</p>
+                                        <p class="dish_description">{{description}}</p>
+                                        {{#if ../signed_in}}<button class="btn btn-secondary">Rate this Dish</button>{{/if}}
+                                    </td>
+                                    <td class="dish_stars_container">
+                                        <p class="dish_stars">{{{stars avg_rating}}}</p>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>                    
+                        {{#if signed_in}}
+                        <button class="btn btn-secondary">Add a Dish!</button> 
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </main>
+  
+  {{>footer}}
+
+</body>

@@ -38,6 +38,7 @@ function get_local_dishes(email) {
 
 const home = {
   index(request, response) {
+    request.session.last_url = "/";
     logger.info("home rendering, name is: " + request.session.name);
     if (request.session.signed_in) {
       restaurants = get_local_restaurants(request.session.email);
