@@ -6,23 +6,23 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="nav nav-pills me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" id="about" href="/about">About</a>
         </li>
-        <li class="nav-item">
-          
-        </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-right">
         <div class="btn-group">
           <a href="/profile" class="btn">{{name}} {{surname}}</a>
           <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="visually-hidden">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" id="profile_settings" href="/profile_settings">
-              <i class="bi bi-person"></i> Profile Settings
+            <li><a class="dropdown-item mb-2" id="profile" href="/profile">
+              <i class="bi bi-person"></i> View Profile
+            </a></li>
+            <li><a class="dropdown-item mb-1" id="profile_settings" href="/profile_settings">
+              <i class="bi bi-gear"></i> Profile Settings
             </a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" id="logout" href="/logout">

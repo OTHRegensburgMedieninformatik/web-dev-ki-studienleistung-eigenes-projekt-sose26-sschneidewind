@@ -1,7 +1,7 @@
 <body>
 
   {{#if signed_in}}
-    {{> menu id="/" name=name surname=surname}}
+    {{> menu id="about" name=name surname=surname}}
   {{else}}
     {{> welcomemenu id="about"}}
   {{/if}}
@@ -31,4 +31,3 @@
   {{>footer}}
 
 </body>
-

@@ -1,6 +1,6 @@
 const express = require("express");
 const logger = require("./utils/logger");
-const stars = require("./utils/stars");
+const helpers = require("./utils/helpers");
 const handlebars = require("express-handlebars");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -11,7 +11,16 @@ dotenv.config();
 const hbs = handlebars.create({
     extname: '.hbs',
     helpers: {
-        stars: stars.get_stars
+        stars: helpers.get_stars,
+        and_not: function(a, b) {
+            return a && !b;
+        },
+        or: function(a, b) {
+            return a || b;
+        },
+        and: function(a, b) {
+            return a && b;
+        }
     }
 });
 

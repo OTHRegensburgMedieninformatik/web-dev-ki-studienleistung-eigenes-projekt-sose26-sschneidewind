@@ -1,6 +1,6 @@
 const handlebars = require("express-handlebars")
 
-const stars = {
+const helper = {
     get_stars(rating) {
         let rounded = (Math.round(2*rating))/2 //now rounded is either x.0 or x.5
         string = ""
@@ -10,7 +10,7 @@ const stars = {
             else string += '<i class="bi bi-star"></i>';
         }
         return string;
-    }
+    },
 }
 
-module.exports = stars;
+module.exports = helper;

@@ -21,6 +21,8 @@ const accounts = {
         request.session.street = "Palmenweg 3",
         request.session.city = "93051 Regensburg",
         request.session.country = "Germany",
+        request.session.rated_restaurants = [],
+        request.session.rated_dishes = []
         response.redirect(request.session.last_url);
     },
 
@@ -39,6 +41,8 @@ const accounts = {
         request.session.street = "Palmenweg 3",
         request.session.city = "93051 Regensburg",
         request.session.country = "Germany",
+        request.session.rated_restaurants = [],
+        request.session.rated_dishes = []
         response.redirect(request.session.last_url);
     },
 }

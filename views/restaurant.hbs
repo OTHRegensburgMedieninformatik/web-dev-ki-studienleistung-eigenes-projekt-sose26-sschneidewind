@@ -1,16 +1,19 @@
 <body>
 
   {{#if signed_in}}
-    {{> menu id="/" name=name surname=surname}}
+    {{> menu name=name surname=surname}}
   {{else}}
-    {{> welcomemenu id="about"}}
+    {{> welcomemenu}}
   {{/if}}
 
   <main>
     <div class="container-fluid">
         <div class="card mt-3">
             <div class="card-header">
-                <h3>{{restaurant_name}} {{{stars restaurant_stars}}}</h3>
+                <div class="d-flex align-items-center justify-content-between">
+                    <h3>{{restaurant_name}} {{{stars restaurant_stars}}}</h3>
+                    {{#if (and (and_not signed_in rate) (and_not signed_in already_rated))}}<a class="btn btn-secondary" href="/restaurant/{{restaurant_id}}/rate">Rate this Restaurant</a>{{/if}}
+                </div>
             </div>
             <div class="card-body">
                 <div class="row d-flex align-items-center justify-content-center">
@@ -18,30 +21,36 @@
                         <img class="restaurant_image" src="{{restaurant_image}}">
                     </div>
                     <div class="col-9 d-flex flex-column align-items-center justify-content-center">
-                        <table class="table table-bordered">
-                            <tbody>
-                                {{#each restaurant_dishes}}
-                                <tr>
-                                    <td style="width:140px;"> 
-                                        <div class="dish_container">
-                                            <img class="dish_image" src="{{dish_picture}}">
-                                        </div>
-                                    </td>
-                                    <td class="dish_details">
-                                        <p class="dish_name">{{dish_name}}</p>
-                                        <p class="dish_price">{{price}}€</p>
-                                        <p class="dish_description">{{description}}</p>
-                                        {{#if ../signed_in}}<button class="btn btn-secondary">Rate this Dish</button>{{/if}}
-                                    </td>
-                                    <td class="dish_stars_container">
-                                        <p class="dish_stars">{{{stars avg_rating}}}</p>
-                                    </td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>                    
-                        {{#if signed_in}}
-                        <button class="btn btn-secondary">Add a Dish!</button> 
+                        {{#if rate}}
+                            {{>rating href=rate_link}}
+                        {{else}}
+                            <table class="table table-bordered">
+                                <tbody>
+                                    {{#each restaurant_dishes}}
+                                    <tr>
+                                        <td style="width:140px;"> 
+                                            <div class="dish_container">
+                                                <img class="dish_image" src="{{dish_picture}}">
+                                            </div>
+                                        </td>
+                                        <td class="dish_details">
+                                            <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{id}}">{{dish_name}}</a></p>
+                                            <p class="dish_price">{{price}}€</p>
+                                            <p class="dish_description">{{description}}</p>
+                                            {{#if (and_not ../signed_in dish_rated)}}
+                                                <a href="/restaurant/{{../restaurant_id}}/dish/{{id}}/rate" class="btn btn-secondary">Rate this Dish</a>
+                                            {{/if}}
+                                        </td>
+                                        <td class="dish_stars_container">
+                                            <p class="dish_stars">{{{stars avg_rating}}}</p>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>                    
+                            {{#if signed_in}}
+                            <a href="/restaurant/{{restaurant_id}}/add_dish" class="btn btn-secondary">Add a Dish!</a> 
+                            {{/if}}
                         {{/if}}
                     </div>
                 </div>

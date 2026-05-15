@@ -1,0 +1,68 @@
+<body>
+
+    {{#if signed_in}}
+        {{> menu name=name surname=surname}}
+    {{else}}
+        {{> welcomemenu}}
+    {{/if}}
+
+    <main>
+        <div class="container-fluid">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h3><a href="/restaurant/{{rest_id}}">{{rest_name}}</a>   {{{stars restaurant_stars}}}</h3>
+                        {{#if (and (and_not signed_in rate) (and_not signed_in restaurant_rated))}}<a href="/restaurant/{{rest_id}}/rate" class="btn btn-secondary">Rate this Restaurant</a>{{/if}}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col-3 d-flex align-items-center justify-content-center">
+                            <img class="restaurant_image" src="{{dish_image}}">
+                        </div>
+                        <div class="col-9 d-flex flex-column align-items-center justify-content-center">
+                            <div class="container-fluid">   
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-10 d-flex flex-column justify-content-center">
+                                                <h3>{{dish_name}} | {{price}}€ | {{{stars stars}}}</h3>
+                                                <p class="mb-0">{{description}}</p>
+                                            </div>
+                                            <div class="col-2 d-flex flex-column align-items-center justify-content-center">
+                                                {{#if (and (and_not signed_in rate) (and_not signed_in dish_rated))}}
+                                                    <a href="/restaurant/{{rest_id}}/dish/{{dish_id}}/rate" class="btn btn-secondary">Rate this dish!</a> 
+                                                {{/if}}                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        {{#if (and (and signed_in rate) (and_not signed_in dish_rated))}}
+                                            {{>rating href=rate_link}}
+                                        {{else}}  
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    {{#each ratings}}
+                                                    <tr>
+                                                        <td>{{date}}</td>
+                                                        <td>{{name}}</td>
+                                                        <td>{{{stars stars}}}</td>
+                                                        <td>{{description}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        {{/if}}              
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+  
+    {{>footer}}
+
+</body>

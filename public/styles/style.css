@@ -70,3 +70,7 @@ main {
     height: 180px;
     text-align: center;
 }
+
+.star-rating {
+    font-size: 30px;
+}
