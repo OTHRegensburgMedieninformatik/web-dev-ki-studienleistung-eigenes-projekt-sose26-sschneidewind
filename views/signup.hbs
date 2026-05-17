@@ -9,12 +9,12 @@
                 <div class="card-body">
                     <form action="/register" method="POST">
                         <div class="mb-3">
-                            <label for="inputFirstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="inputFirstName" name="firstName">
+                            <label for="inputName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="inputName" name="name">
                         </div>
                         <div class="mb-3">
-                            <label for="inputLastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="inputLastName" name="lastName">
+                            <label for="inputSurname" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="inputSurname" name="surname">
                         </div>
                         <div class="mb-3">
                             <label for="inputStreet" class="form-label">Full Adress</label>
@@ -36,7 +36,10 @@
                             <label for="inputPassword" class="form-label">Password</label>
                             <input type="password" class="form-control" id="inputPassword" name="password">
                         </div>
-                        <button type="submit" class="btn btn-primary">Register</button>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                            {{#if error}} {{error_msg}} {{/if}}
+                        </div>
                     </form>
                 </div>
             </div>

@@ -16,7 +16,10 @@
                             <label for="inputPassword" class="form-label">Password</label>
                             <input type="password" class="form-control" id="inputPassword" name="password">
                         </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            {{#if failed_login}}{{error_msg}}{{/if}}
+                        </div>
                     </form>
                 </div>
             </div>

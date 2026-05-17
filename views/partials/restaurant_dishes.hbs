@@ -1,0 +1,27 @@
+<table class="table table-bordered">
+    <tbody>
+        {{#each restaurant_dishes}}
+        <tr>
+            <td style="width:140px;"> 
+                <div class="dish_container">
+                    <img class="dish_image" src="{{dish_picture}}">
+                </div>
+            </td>
+            <td class="dish_details">
+                <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{id}}">{{dish_name}}</a></p>
+                <p class="dish_price">{{price}}€</p>
+                <p class="dish_description">{{description}}</p>
+                {{#if (and_not (and_not ../signed_in dish_rated) ../add_dish)}}
+                    <a href="/restaurant/{{../restaurant_id}}/dish/{{id}}/rate" class="btn btn-secondary">Rate this Dish</a>
+                {{/if}}
+            </td>
+            <td class="dish_stars_container">
+                <p class="dish_stars">{{{stars avg_rating}}}</p>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>                    
+{{#if (and_not signed_in add_dish)}}
+<a href="/restaurant/{{restaurant_id}}/add_dish" class="btn btn-secondary">Add a Dish!</a> 
+{{/if}}

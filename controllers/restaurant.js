@@ -45,9 +45,11 @@ function get_restaurant_info(id, request) {
 const restaurant = {
     index(request, response){
         let rest_id = request.params.id;
-        request.session.last_url = "/restaurant/"+rest_id;
+        let base_url = "/restaurant/"+rest_id
+        request.session.last_url = base_url;
         let restaurant_data = get_restaurant_info(rest_id, request);
-        let rate_link = "/restaurant/"+rest_id+"/rate";
+        let rate_link = base_url+"/rate";
+        let add_link = base_url+"/add_dish";
         if (request.session.rated_restaurants != undefined) {
             already_rated = request.session.rated_restaurants.includes(rest_id);
         } else already_rated = false;
@@ -63,6 +65,8 @@ const restaurant = {
             surname: request.session.surname,
             rate: (request.path === rate_link && !already_rated),
             rate_link: rate_link,
+            add_dish: (request.path === add_link),
+            add_link: add_link,
             already_rated: already_rated
         }
         response.render("restaurant", viewData)
@@ -89,6 +93,37 @@ const restaurant = {
             name: request.session.name,
             surname: request.session.surname,
             rate: false,
+            already_rated: already_rated
+        }
+        response.render("restaurant", viewData)
+    },
+
+    add_dish(request, response) {
+        let rest_id = request.params.id;
+        //save the new dish into the database
+
+        //render the same restaurant again
+        let base_url = "/restaurant/"+rest_id
+        request.session.last_url = base_url;
+        let restaurant_data = get_restaurant_info(rest_id, request);
+        let rate_link = base_url+"/rate";
+        let add_link = base_url+"/add_dish";
+        if (request.session.rated_restaurants != undefined) {
+            already_rated = request.session.rated_restaurants.includes(rest_id);
+        } else already_rated = false;
+        const viewData = {
+            title: "restaurant "+restaurant_data.restaurant_name,
+            restaurant_name: restaurant_data.restaurant_name,
+            restaurant_image: restaurant_data.restaurant_image,
+            restaurant_dishes: restaurant_data.restaurant_dishes,
+            restaurant_stars: restaurant_data.restaurant_stars,
+            restaurant_id: request.params.id,
+            signed_in: request.session.signed_in,
+            name: request.session.name,
+            surname: request.session.surname,
+            rate: (request.path === rate_link && !already_rated),
+            rate_link: rate_link,
+            add_dish: false,
             already_rated: already_rated
         }
         response.render("restaurant", viewData)

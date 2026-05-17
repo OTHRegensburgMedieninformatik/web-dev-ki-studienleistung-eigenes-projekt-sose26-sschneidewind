@@ -21,35 +21,37 @@
                         <img class="restaurant_image" src="{{restaurant_image}}">
                     </div>
                     <div class="col-9 d-flex flex-column align-items-center justify-content-center">
-                        {{#if rate}}
-                            {{>rating href=rate_link}}
+                        {{#if (and signed_in add_dish)}}
+                            <form action="{{add_link}}" method="Post" class="w-100">
+                                <table class="table table-bordered w-100">
+                                    <tbody>
+                                        <tr>
+                                            <td width="200px">
+                                                maybe uploading an image
+                                            </td>
+                                            <td>
+                                                <div class="dish_details">
+                                                    <label for="input_name" class="form_label">Name of the Dish</label>
+                                                    <input type="text" class="form-control" id="input_name">
+                                                    <label for="input_price" class="form_label">Price (in €)</label>
+                                                    <input type="float" class="form-control" id="input_price">
+                                                    <label for="input_description" class="form_label">Description (optional)</label>
+                                                    <input type="text" class="form-control" id="input_description">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>    
+                                </table>
+                                <div class="mb-5 d-flex align-items-center justify-content-center">
+                                    <button type="submit" class="btn btn-secondary">Submit</button>
+                                </div>
+                            </form>
+                            {{>restaurant_dishes signed_in=signed_in restaurant_dishes=restaurant_dishes add_dish=add_dish}}
                         {{else}}
-                            <table class="table table-bordered">
-                                <tbody>
-                                    {{#each restaurant_dishes}}
-                                    <tr>
-                                        <td style="width:140px;"> 
-                                            <div class="dish_container">
-                                                <img class="dish_image" src="{{dish_picture}}">
-                                            </div>
-                                        </td>
-                                        <td class="dish_details">
-                                            <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{id}}">{{dish_name}}</a></p>
-                                            <p class="dish_price">{{price}}€</p>
-                                            <p class="dish_description">{{description}}</p>
-                                            {{#if (and_not ../signed_in dish_rated)}}
-                                                <a href="/restaurant/{{../restaurant_id}}/dish/{{id}}/rate" class="btn btn-secondary">Rate this Dish</a>
-                                            {{/if}}
-                                        </td>
-                                        <td class="dish_stars_container">
-                                            <p class="dish_stars">{{{stars avg_rating}}}</p>
-                                        </td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>                    
-                            {{#if signed_in}}
-                            <a href="/restaurant/{{restaurant_id}}/add_dish" class="btn btn-secondary">Add a Dish!</a> 
+                            {{#if rate}}
+                                {{>rating href=rate_link}}
+                            {{else}}
+                                {{>restaurant_dishes signed_in=signed_in restaurant_dishes=restaurant_dishes add_dish=add_dish}}
                             {{/if}}
                         {{/if}}
                     </div>

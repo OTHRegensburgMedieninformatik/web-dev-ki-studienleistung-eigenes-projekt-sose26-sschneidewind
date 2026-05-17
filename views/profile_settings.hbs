@@ -17,8 +17,12 @@
                             <input type="text" class="form-control" id="inputSurname" name="surname" value="{{surname}}">
                         </div>
                         <div class="mb-3">
-                            <label for="inputEmail" class="form-label">Email</label>
+                            <label for="inputEmail" class="form-label">Current Email</label>
                             <input type="email" class="form-control" id="inputEmail" name="email" value="{{email}}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputNewEmail" class="form-label">New Email (optional)</label>
+                            <input type="email" class="form-control" id="inputNewEmail" name="newEmail">
                         </div>
                         <div class="mb-3">
                             <label for="inputStreet" class="form-label">Full Adress</label>
@@ -37,7 +41,14 @@
                             <label for="inputPassword" class="form-label">Current Password for verification</label>
                             <input type="password" class="form-control" id="inputPassword" name="password">
                         </div>
-                        <button type="submit" class="btn btn-primary">Change Information</button>
+                        <div class="mb-3">
+                            <label for="inputNewPassword" class="form-label">New Password (optional)</label>
+                            <input type="password" class="form-control" id="inputNewPassword" name="newPassword">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Change Information</button>
+                            {{#if error}} {{error_msg}} {{/if}}
+                        </div>
                     </form>
                 </div>
             </div>
