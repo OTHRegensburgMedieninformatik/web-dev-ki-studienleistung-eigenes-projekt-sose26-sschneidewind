@@ -7,6 +7,7 @@ function extract_user_info(request, user) {
     request.session.surname = user.surname;
     request.session.email = user.email;
     request.session.street = user.street;
+    request.session.postal_code = user.postal_code;
     request.session.city = user.city;
     request.session.country = user.country;
     request.session.rated_restaurants = [];
@@ -30,11 +31,14 @@ const accounts = {
 
     async register(request, response) {
         const user = request.body;
+        const [postal_code, ...city] = String(request.body.city).split(" ");
+        user.postal_code = Number(postal_code);
+        user.city = city.join(" ");
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) {
             extract_user_info(request, user);
-            if (response.session !== undefined)
-                if (response.session.last_url !== undefined)
+             if (request.session !== undefined)
+                if (request.session.last_url !== undefined) 
                     response.redirect(request.session.last_url);
                 else
                     response.redirect("/")
@@ -64,8 +68,8 @@ const accounts = {
         let user = await user_store.authenticate(request.body.email, request.body.password);
         if (user !== undefined) {
             extract_user_info(request, user);
-            if (response.session !== undefined)
-                if (response.session.last_url !== undefined)
+            if (request.session !== undefined)
+                if (request.session.last_url !== undefined) 
                     response.redirect(request.session.last_url);
                 else
                     response.redirect("/")

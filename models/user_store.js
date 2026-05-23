@@ -4,8 +4,8 @@ const logger = require("../utils/logger.js");
 
 const user_store = {
     async add_user(user) {
-        const query = "insert into users(email, name, surname, street, city, country, password) values ($1, $2, $3, $4, $5, $6, $7)";
-        const values = [user.email, user.name, user.surname, user.street, user.city, user.country, user.password];
+        const query = "insert into users(email, name, surname, street, postal_code, city, country, password) values ($1, $2, $3, $4, %5, $6, $7, $8)";
+        const values = [user.email, user.name, user.surname, user.street, user.postal_code, user.city, user.country, user.password];
         try {
             await dataStoreClient.query(query, values);
             return [0,0];
@@ -31,8 +31,8 @@ const user_store = {
     async change_attributes(user) {
         const final_email = user.newEmail !== '' ? user.newEmail : user.email;
         const final_password = user.newPassword !== '' ? user.newPassword : user.password;
-        const query = "UPDATE users SET email=$1, name=$2, surname=$3, street=$4, city=$5, country=$6, password=$7 WHERE email=$8";
-        const values = [final_email, user.name, user.surname, user.street, user.city, user.country, final_password, user.email];
+        const query = "UPDATE users SET email=$1, name=$2, surname=$3, postal_code=$4, street=$5, city=$6, country=$7, password=$8 WHERE email=$9";
+        const values = [final_email, user.name, user.surname, user.postal_code, user.street, user.city, user.country, final_password, user.email];
         try {
             let response = await dataStoreClient.query(query, values);
             return [0,0];

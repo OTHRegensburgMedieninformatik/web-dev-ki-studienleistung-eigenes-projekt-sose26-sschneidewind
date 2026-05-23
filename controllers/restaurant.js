@@ -1,18 +1,19 @@
 const logger = require("../utils/logger.js");
+const restaurant_store = require("../models/restaurant_store.js");
 
-function get_dishes_restaurant(id, request) {
-    if (id == 1) {
+function get_dishes_restaurant(rest_id, request) {
+    if (rest_id == 1) {
         return [
-            {dish_name: "Pizza Margherita", dish_picture: "/images/dishes/1/1.png", price: "5.99", description: "Tomato Sauce, Mozzarella", avg_rating: 4.5, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == id && d_id == 1) ?? false},
-            {dish_name: "Pizza Tonno", dish_picture: "/images/dishes/1/2.png", price: "7.99", description: "Tomato Sauce, Mozzarella, Tuna, Onions", avg_rating: 5, id: 2, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == id && d_id == 2) ?? false}
+            {dish_name: "Pizza Margherita", dish_picture: "/images/dishes/1/1.png", price: "5.99", description: "Tomato Sauce, Mozzarella", avg_rating: 4.5, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == rest_id && d_id == 1) ?? false},
+            {dish_name: "Pizza Tonno", dish_picture: "/images/dishes/1/2.png", price: "7.99", description: "Tomato Sauce, Mozzarella, Tuna, Onions", avg_rating: 5, id: 2, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == rest_id && d_id == 2) ?? false}
         ]
-    } else if (id == 2) {
+    } else if (rest_id == 2) {
         return [
-            {dish_name: "Nudeln rot weiß", dish_picture: "/images/dishes/2/1.png", price: "3.99", description: "Noodles with Ketchup and Mayonnaise", avg_rating: 1.5, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == id && d_id == 1) ?? false},
+            {dish_name: "Nudeln rot weiß", dish_picture: "/images/dishes/2/1.png", price: "3.99", description: "Noodles with Ketchup and Mayonnaise", avg_rating: 1.5, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == rest_id && d_id == 1) ?? false},
         ]
-    } else if (id == 3) {
+    } else if (rest_id == 3) {
         return [
-            {dish_name: "soup soup soup", dish_picture: "/images/dishes/3/1.png", price: "9.99", description: "Special Soup... Let us surprise you!", avg_rating: 3, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == id && d_id == 1) ?? false},
+            {dish_name: "soup soup soup", dish_picture: "/images/dishes/3/1.png", price: "9.99", description: "Special Soup... Let us surprise you!", avg_rating: 3, id: 1, dish_rated: request.session.rated_dishes?.some(([r_id, d_id]) => r_id == rest_id && d_id == 1) ?? false},
         ]
     } else return []
 }

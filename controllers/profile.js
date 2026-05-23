@@ -8,7 +8,7 @@ function make_view_data(title, request) {
       surname: request.session.surname,
       email: request.session.email,
       street: request.session.street,
-      city: request.session.city,
+      city: request.session.postal_code + " " + request.session.city,
       country: request.session.country,
   };
 }
@@ -18,6 +18,7 @@ function update_data(request, user) {
   request.session.surname = user.surname;
   request.session.email = user.newEmail === '' ? user.email : user.newEmail;
   request.session.street = user.street;
+  request.session.postal_code = user.postal_code;
   request.session.city = user.city;
   request.session.country = user.country;
 }
@@ -52,6 +53,9 @@ const profile = {
 
   async change_attributes(request, response) {
     let user = request.body;
+    const [postal_code, ...city] = String(request.body.city).split(" ");
+    user.postal_code = Number(postal_code);
+    user.city = city.join(" ");
     logger.info(user);
     let user_response = await user_store.authenticate(user.email, user.password)
     let viewData = make_view_data("Settings", request);
