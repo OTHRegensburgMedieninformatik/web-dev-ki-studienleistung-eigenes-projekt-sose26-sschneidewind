@@ -1,5 +1,8 @@
 const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
+const dish_store = require("../models/dish_store.js");
+const fs = require("fs");
+const path = require("path");
 
 function get_dishes_restaurant(rest_id, request) {
     if (rest_id == 1) {
@@ -44,24 +47,38 @@ function get_restaurant_info(id, request) {
 }
 
 const restaurant = {
-    index(request, response){
+    async index(request, response){
         let rest_id = request.params.id;
-        let base_url = "/restaurant/"+rest_id
+        let base_url = "/restaurant/"+rest_id;
         request.session.last_url = base_url;
-        let restaurant_data = get_restaurant_info(rest_id, request);
         let rate_link = base_url+"/rate";
         let add_link = base_url+"/add_dish";
-        if (request.session.rated_restaurants != undefined) {
+        let restaurant_data = await restaurant_store.get_restaurant(rest_id);
+        let img_path = path.join(__dirname, "../public/images/restaurants", rest_id+".png");
+
+        if (restaurant_data === undefined) {
+            logger.info("Something went horribly wrong!");
+            response.redirect("/");
+        }
+
+        if (request.session.rated_restaurants !== undefined) {
             already_rated = request.session.rated_restaurants.includes(rest_id);
         } else already_rated = false;
+
+        let dishes =  await dish_store.get_dishes(rest_id);
+        let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
+        logger.info("image exists:")
+        logger.info(dishes);
         const viewData = {
-            title: "restaurant "+restaurant_data.restaurant_name,
-            restaurant_name: restaurant_data.restaurant_name,
-            restaurant_image: restaurant_data.restaurant_image,
-            restaurant_dishes: restaurant_data.restaurant_dishes,
-            restaurant_stars: restaurant_data.restaurant_stars,
+            title: "restaurant "+restaurant_data.name,
+            restaurant_name: restaurant_data.name,
+            restaurant_image: fs.existsSync(img_path) ? "/images/restaurants/"+rest_id+".png":"/images/restaurants/no_image.png",
+            restaurant_dishes: dishes !== undefined? dishes : [],
+            show_restaurant_stars: ratings[1] !== undefined,
+            restaurant_stars: ratings[1],
+            restaurant_ratings: ratings[0],
             restaurant_id: request.params.id,
-            signed_in: request.session.signed_in,
+            signed_in: request.session.user_id !== undefined,
             name: request.session.name,
             surname: request.session.surname,
             rate: (request.path === rate_link && !already_rated),

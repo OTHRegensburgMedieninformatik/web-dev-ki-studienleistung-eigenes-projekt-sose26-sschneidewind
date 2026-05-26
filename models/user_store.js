@@ -4,18 +4,18 @@ const logger = require("../utils/logger.js");
 
 const user_store = {
     async add_user(user) {
-        const query = "insert into users(email, name, surname, street, postal_code, city, country, password) values ($1, $2, $3, $4, %5, $6, $7, $8)";
+        const query = "insert into users(email, name, surname, street, postal_code, city, country, password) values ($1, $2, $3, $4, $5, $6, $7, $8)";
         const values = [user.email, user.name, user.surname, user.street, user.postal_code, user.city, user.country, user.password];
         try {
             await dataStoreClient.query(query, values);
             return [0,0];
         } catch (e) {
             logger.info("adding user returned error "+e);
-            return [1, e];
+            return [1, e, values];
         }
     },
     
-    async authenticate(email, password) {
+    async authenticate(email, password) { //if authenticated correctly returns the information, else undefined
         const query = "select  * from users where email=$1 and password = $2";
         const values = [email, password];
         try {
@@ -46,8 +46,23 @@ const user_store = {
         }
     },
 
-    async get_user_ratings(user_id) {
-        const query = "s"
+    async get_user_dish_or_restaurant_ratings(user_id, get_dish) {
+        let dish_query = "select dishes.r_id as rest_id, dishes.d_id as dish_id, stars, text as string, time, restaurants.name as restaurant, dishes.name as dish from dish_ratings join dishes on (dish_ratings.d_id = dishes.d_id) and (dish_ratings.r_id = dishes.r_id) join restaurants on dish_ratings.r_id = restaurants.id where u_id=$1;" //funny double join to get the name of the restaurant as well as the name of the dish as both are stored in different tables
+        let rest_query = "select r_id as rest_id, stars, text as string, time, name as restaurant from restaurant_ratings join restaurants on restaurant_ratings.r_id = restaurants.id where u_id=$1"
+        const query = get_dish ? dish_query : rest_query;
+        const values = [user_id];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows;
+            } else {
+                logger.info("There were no lines in the "+(get_dish ? "dish":"restaurant")+ " ratings of user "+user_id);
+                return undefined;
+            }
+        } catch (e) {
+            logger.info("There was an error while getting "+(get_dish ? "dish":"restaurant")+ " ratings for user "+user_id+": "+e);
+            return undefined;
+        }
     },
 
     async get_user_info(user_id) {
@@ -71,19 +86,35 @@ const user_store = {
         const query = "select r_id, d_id from dish_ratings where u_id=$1";
         const values = [user_id];
         try {
-            let response = dataStoreClient.query(query, values);
+            let response = await dataStoreClient.query(query, values);
             if (response.rows[0] !== undefined) {
-                return response.rows;
+                return response.rows.map(row => [row.r_id, row.d_id]); // returns an array of arrays instead of objects, previously would return [{r_id, d_id}, {r_id, d_id}], now returns [[r_id, d_id], [r_id, d_id]]
             } else {
-                logger.info("Error: There probably were no current ratings for user "+user_id);
+                logger.info("Error: There probably were no current dish-ratings for user "+user_id);
                 return undefined;
             }
         } catch(e) {
-            logger.info("Error: couldn't get user "+user_id+": "+e);
+            logger.info("Error: couldn't get dish ratings for user "+user_id+": "+e);
             return undefined;
         }
     },
 
+    async get_already_rated_restaurants(user_id) {
+        const query = "select r_id from restaurant_ratings where u_id=$1";
+        const values = [user_id];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows.map(row=>row.r_id); //same idea as above, returns [1,2,3] instead of [{r_id: 1}, {r_id: 2}, {r_id: 3}]
+            } else {
+                logger.info("Error: There were no current restaurant ratings for user "+user_id);
+                return undefined;
+            }
+        } catch(e) {
+            logger.info("Error: couldn't get restaurant ratings for user "+user_id+": "+e);
+            return undefined;
+        }
+    }
 };
 
 module.exports = user_store;

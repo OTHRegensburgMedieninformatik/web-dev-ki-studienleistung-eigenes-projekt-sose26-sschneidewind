@@ -8,7 +8,7 @@
                 </div>
             </td>
             <td class="dish_details">
-                <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{id}}">{{dish_name}}</a></p>
+                <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{d_id}}">{{name}}</a></p>
                 <p class="dish_price">{{price}}€</p>
                 <p class="dish_description">{{description}}</p>
                 {{#if (and_not (and_not ../signed_in dish_rated) ../add_dish)}}

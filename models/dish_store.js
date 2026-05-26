@@ -4,7 +4,6 @@ const logger = require("../utils/logger.js");
 
 //getter return undefined or the object, writer / adder return an array with first element 0 if fine and 1 if error and second element the error message
 
-
 const dish_store = {
     async get_dishes(rest_id) {
         const query = "select * from dishes where r_id=$1";
@@ -19,6 +18,42 @@ const dish_store = {
             }
         } catch(e) {
             logger.info("Getting dishes for restaurant "+rest_id+" returned an error: "+e);
+            return undefined;
+        }
+    },
+
+    async get_dish(rest_id, dish_id) {
+        const query = "select * from dishes where r_id=$1 and d_id=$2";
+        const values = [rest_id, dish_id];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows[0];
+            } else {
+                logger.info("Error, the dish "+dish_id+" of restaurant "+rest_id+" was not found!");
+                return undefined;
+            }
+        } catch(e) {
+            logger.info("Getting dish "+dish_id+" of restaurant "+rest_id+" returned an error: "+e);
+            return undefined;
+        }
+    },
+
+    async get_dish_ratings(rest_id, dish_id) {
+        const query1 = "select * from dish_ratings where r_id=$1 and d_id=$2";
+        const query2 = "select avg(stars) as avg_stars from dish_ratings where r_id=$1 and d_id=$2 group by d_id"
+        const values = [rest_id, dish_id];
+        try {
+            let response1 = await dataStoreClient.query(query1, values);
+            let response2 = await dataStoreClient.query(query2, values);
+            if (response1.rows[0] !== undefined) { //the dish exists and there is at least one rating
+                return [response1.rows, parseFloat(response2.rows[0].avg_stars)];
+            } else {
+                logger.info("Error, ratings for the dish "+dish_id+" of restaurant "+rest_id+" was not found!");
+                return undefined;
+            }
+        } catch(e) {
+            logger.info("Getting dish "+dish_id+" of restaurant "+rest_id+" returned an error: "+e);
             return undefined;
         }
     },

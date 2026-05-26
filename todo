@@ -1,0 +1,10 @@
+finish adding the full database functionality
+    include into profile
+    include into restaurants
+    include into dishes
+    much much testing
+
+protect routes where not logged in users should not have access
+
+admin functionality?
+leaflet map + coordinate api

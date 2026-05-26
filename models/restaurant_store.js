@@ -34,6 +34,26 @@ const restaurant_store = {
         }
     },
 
+    async get_restaurant_ratings(rest_id) {
+        const query1 = "select * from restaurant_ratings where r_id=$1";
+        const query2 = "select avg(stars) as avg_stars from restaurant_ratings where r_id=$1 group by r_id"
+        const values = [rest_id];
+        try {
+            let response1 = await dataStoreClient.query(query1, values);
+            let response2 = await dataStoreClient.query(query2, values);
+            if (response1.rows[0] !== undefined) { //the dish exists and there is at least one rating
+                return [response1.rows, parseFloat(response2.rows[0].avg_stars)];
+            } else {
+                logger.info("Error, ratings for the restaurant "+rest_id+" were not found!");
+                return undefined;
+            }
+        } catch(e) {
+            logger.info("Getting restaurant "+rest_id+" returned an error: "+e);
+            return undefined;
+        }
+    },
+
+
     async rate_restaurant(user_id, rest_id, rating) {
         const query = "insert into restaurant_ratings(u_id, r_id, stars, text) values ($1, $2, $3, $4)";
         const values = [user_id, rest_id, rating.stars, rating.description];

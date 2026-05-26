@@ -1,4 +1,5 @@
 const logger = require("../utils/logger.js");
+const dish_store = require("../models/dish_store.js")
 
 function get_dish_info(rest_id, dish_id) {
     if (rest_id==1) {
@@ -13,18 +14,19 @@ function get_dish_info(rest_id, dish_id) {
 }
 
 const dishes = {
-    index(request, response) {
+    async index(request, response) {
         let dish_id = request.params.dish_id;
         let rest_id = request.params.restaurant_id;
-        let information = get_dish_info(rest_id, dish_id);
-        request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
+        let information = await dish_store.get_dish(rest_id, dish_id);
+        let ratings_stars = await dish_store.get_dish_ratings(rest_id, dish_id);
         let rate_link = "/restaurant/"+rest_id+"/dish/"+dish_id+"/rate";
+        request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
 
-        if (request.session.rated_restaurants != undefined) {
+        if (request.session.rated_restaurants !== undefined) {
             rest_already_rated = request.session.rated_restaurants.includes(rest_id);
         } else rest_already_rated = false;
 
-        if (request.session.rated_dishes != undefined) {
+        if (request.session.rated_dishes !== undefined) {
             dish_already_rated = request.session.rated_dishes.some(([r_id, d_id]) => r_id == rest_id && d_id == dish_id);
         } else dish_already_rated = false;
 

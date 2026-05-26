@@ -85,7 +85,8 @@ insert into restaurant_ratings(u_id, r_id, stars, text) values
 	(1, 1, 4, 'Great Pizza but not tso great staff'),
 	(1, 2, 2, 'The Noodles were cold...'),
 	(2, 1, 5, 'Everything was perfect!'),
-	(2, 3, 4, 'The soups were truly... inspirational');
+	(2, 3, 4, 'The soups were truly... inspirational'),
+	(3, 2, 4, 'It was interesting to eat these noodles... Certainly special!');
 
 create table dish_ratings(
 	u_id int references users(id),
@@ -105,10 +106,12 @@ insert into dish_ratings(u_id, r_id, d_id, stars, text) values
 	(2, 3, 1, 3, 'The soup was truly... a surprise...'),
 	(4, 3, 1, 5, 'There was a fly in the soup, good protein :)');
 
-/*
-select * from users;
 
+select * from users;
+/*
 select * from restaurants;
+
+select * from dishes
 
 select users.name, restaurants.name, restaurant_ratings.stars 
 from users join restaurant_ratings on restaurant_ratings.u_id = users.id join restaurants on restaurant_ratings.r_id = restaurants.id;
@@ -135,8 +138,19 @@ select max(d_id) as max_id from dishes where r_id = 5;
 insert into dishes(name, r_id, d_id, price, description) values 
 ('new_dish', 4, (select coalesce(max(d_id),0)+1 from dishes where r_id = 4), 5.99, 'some dish');
 
-select * from dishes
+select dishes.r_id as rest_id, dishes.d_id as dish_id, stars, text as string, time, restaurants.name as restaurant, dishes.name as dish
+from dish_ratings 
+join dishes on (dish_ratings.d_id = dishes.d_id) and (dish_ratings.r_id = dishes.r_id)
+join restaurants on dish_ratings.r_id = restaurants.id
+where u_id=2;
+
+select r_id as rest_id, stars, text as string, time, name as restaurant
+from restaurant_ratings 
+join restaurants on restaurant_ratings.r_id = restaurants.id
+where u_id=1;
+
+select * from restaurant_ratings where u_id = 1;
+select avg(stars) as avg_stars from dish_ratings where r_id=3 and d_id=1 group by d_id;
+
+select * from restaurant_ratings where r_id=1
 */
-
-select 
-
