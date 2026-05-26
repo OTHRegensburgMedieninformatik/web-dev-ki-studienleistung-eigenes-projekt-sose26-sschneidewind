@@ -2,6 +2,7 @@ const user_store = require("../models/user_store");
 const logger = require("../utils/logger")
 
 function extract_user_info(request, user) {
+    request.session.user_id = user.u_id;
     request.session.signed_in = true;
     request.session.name = user.name;
     request.session.surname = user.surname;
@@ -65,7 +66,7 @@ const accounts = {
     },
 
     async authenticate(request, response) {
-        let user = await user_store.authenticate(request.body.email, request.body.password);
+        const user = await user_store.authenticate(request.body.email, request.body.password);
         if (user !== undefined) {
             extract_user_info(request, user);
             if (request.session !== undefined)
