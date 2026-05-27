@@ -1,15 +1,15 @@
 <form action={{href}} method="POST" class="w-100">
-    <div  class="star-rating mb-3">
-        <input type="radio" name="number_of_stars" id="star5" value="5" hidden>
-        <label for="star5"><i class="bi bi-star"></i></label>
-        <input type="radio" name="number_of_stars" id="star4" value="4" hidden>
-        <label for="star4"><i class="bi bi-star"></i></label>
-        <input type="radio" name="number_of_stars" id="star3" value="3" hidden>
-        <label for="star3"><i class="bi bi-star"></i></label>
-        <input type="radio" name="number_of_stars" id="star2" value="2" hidden>
-        <label for="star2"><i class="bi bi-star"></i></label>
+    <div  class="star_rating mb-3">
         <input type="radio" name="number_of_stars" id="star1" value="1" hidden>
         <label for="star1"><i class="bi bi-star"></i></label>
+        <input type="radio" name="number_of_stars" id="star2" value="2" hidden>
+        <label for="star2"><i class="bi bi-star"></i></label>
+        <input type="radio" name="number_of_stars" id="star3" value="3" hidden>
+        <label for="star3"><i class="bi bi-star"></i></label>
+        <input type="radio" name="number_of_stars" id="star4" value="4" hidden>
+        <label for="star4"><i class="bi bi-star"></i></label>
+        <input type="radio" name="number_of_stars" id="star5" value="5" hidden>
+        <label for="star5"><i class="bi bi-star"></i></label>
     </div>
     <div class="mb-3">
         <label for="text" class="form-label">Text (optional)</label>
@@ -19,11 +19,10 @@
 </form>
 
 <script>
-    document.querySelectorAll('.star-rating input').forEach(input => {
-        input.addEventListener('change', () => {
-            const value = 5-input.value;
-            document.querySelectorAll('.star-rating label i').forEach((icon, index) => {
-                if (index <= value) {
+    document.querySelectorAll('.star_rating input').forEach(input => { //selects all elements of the document that are children of star_rating and adds 
+        input.addEventListener('change', () => {    //an event listener that waits on a change and then calls a function with no parameters 
+            document.querySelectorAll('.star_rating label i').forEach((icon, index) => { //and then checks, if, when the current value is clicked, the class should be that 
+                if (index <= input.value-1) {   //of a full or an empty star
                     icon.className = 'bi bi-star-fill';
                 } else {
                     icon.className = 'bi bi-star';

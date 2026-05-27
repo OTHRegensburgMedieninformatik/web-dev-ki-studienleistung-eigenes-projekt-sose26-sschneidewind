@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth  = require("./utils/auth.js")
 
 const home = require("./controllers/home.js");
 const about = require("./controllers/about.js");
@@ -17,19 +18,17 @@ router.post("/register", accounts.register);
 router.get("/logout", accounts.logout);
 router.post("/authenticate", accounts.authenticate);
 
-//need to be protected another way
-router.get("/profile", profile.index);
-router.get("/profile_settings", profile.settings);
-router.post("/change_profile_attributes", profile.change_attributes)
+router.get("/profile", auth.protected, profile.index);
+router.get("/profile_settings", auth.protected, profile.settings);
+router.post("/change_profile_attributes", auth.protected, profile.change_attributes)
 
-//rating protected by check if user is logged in, maybe other way?
 router.get("/restaurant/:id", restaurant.index);
-router.get("/restaurant/:id/rate", restaurant.index);
-router.get("/restaurant/:id/add_dish", restaurant.index);
-router.post("/restaurant/:id/add_dish", restaurant.add_dish);
-router.post("/restaurant/:id/rate", restaurant.add_rating);
+router.get("/restaurant/:id/rate", auth.protected, restaurant.index);
+router.get("/restaurant/:id/add_dish", auth.protected, restaurant.index);
+router.post("/restaurant/:id/add_dish", auth.protected, restaurant.add_dish);
+router.post("/restaurant/:id/rate", auth.protected, restaurant.add_rating);
 router.get("/restaurant/:restaurant_id/dish/:dish_id", dishes.index);
-router.get("/restaurant/:restaurant_id/dish/:dish_id/rate", dishes.index);
-router.post("/restaurant/:restaurant_id/dish/:dish_id/rate", dishes.add_rating);
+router.get("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dishes.index);
+router.post("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dishes.add_rating);
 
 module.exports = router;

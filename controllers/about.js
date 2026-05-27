@@ -6,7 +6,7 @@ const about = {
     request.session.last_url = "/about";
     const viewData = {
       title: "About Critical Restaurant",
-      signed_in: request.session.user_id !== undefined,
+      signed_in: request.session.signed_in,
       name: request.session.name,
       surname: request.session.surname
     };

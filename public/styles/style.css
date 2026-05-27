@@ -71,6 +71,11 @@ main {
     text-align: center;
 }
 
-.star-rating {
+.star_rating {
     font-size: 30px;
+}
+
+.ratings_table td, .ratings_table th {
+    text-align: center;
+    vertical-align: middle;
 }

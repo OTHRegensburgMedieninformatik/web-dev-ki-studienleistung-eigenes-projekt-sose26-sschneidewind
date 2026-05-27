@@ -156,3 +156,6 @@ select avg(stars) as avg_stars from dish_ratings where r_id=3 and d_id=1 group b
 
 select * from restaurant_ratings where r_id=1
 */
+
+select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=1;
+

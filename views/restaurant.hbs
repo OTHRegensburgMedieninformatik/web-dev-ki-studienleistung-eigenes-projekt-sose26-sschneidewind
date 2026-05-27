@@ -11,8 +11,8 @@
         <div class="card mt-3">
             <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between">
-                    <h3>{{restaurant_name}} {{{stars restaurant_stars}}}</h3>
-                    {{#if (and (and_not signed_in rate) (and_not signed_in already_rated))}}<a class="btn btn-secondary" href="/restaurant/{{restaurant_id}}/rate">Rate this Restaurant</a>{{/if}}
+                    <h3>{{restaurant_name}} {{#if show_restaurant_stars}} {{{stars restaurant_stars}}} {{/if}}</h3>
+                    {{#if show_rate_button}}<a class="btn btn-secondary" href="/restaurant/{{restaurant_id}}/rate">Rate this Restaurant</a>{{/if}}
                 </div>
             </div>
             <div class="card-body">
@@ -21,7 +21,7 @@
                         <img class="restaurant_image" src="{{restaurant_image}}">
                     </div>
                     <div class="col-9 d-flex flex-column align-items-center justify-content-center">
-                        {{#if (and signed_in add_dish)}}
+                        {{#if adding_dish}}
                             <form action="{{add_link}}" method="Post" class="w-100">
                                 <table class="table table-bordered w-100">
                                     <tbody>
@@ -55,6 +55,30 @@
                             {{/if}}
                         {{/if}}
                     </div>
+                </div>
+                <div >
+                    <table class="mt-5 table table-bordered align-items-center justify-content-center ratings_table">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Date</th>
+                                <th class="text-center align-middle">Name</th>
+                                <th class="text-center align-middle">Text</th>
+                                <th class="text-center align-middle">Stars</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each restaurant_ratings}}
+                            <tr>
+                                <td class="text-center align-middle">{{time}}</td>
+                                <td class="text-center align-middle">{{name}} {{surname}}</td>
+                                <td class="text-center align-middle">{{text}}</td>
+                                <td class="text-center align-middle">
+                                    {{{stars stars}}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

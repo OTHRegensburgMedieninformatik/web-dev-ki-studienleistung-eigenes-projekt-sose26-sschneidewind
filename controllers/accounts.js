@@ -3,6 +3,7 @@ const logger = require("../utils/logger")
 
 async function extract_user_info(request, user) { //
     request.session.user_id = user.id;
+    request.session.signed_in = true;
     request.session.name = user.name;
     request.session.surname = user.surname;
     request.session.email = user.email;

@@ -11,8 +11,8 @@
                 <p class="dish_name"><a href="/restaurant/{{../restaurant_id}}/dish/{{d_id}}">{{name}}</a></p>
                 <p class="dish_price">{{price}}€</p>
                 <p class="dish_description">{{description}}</p>
-                {{#if (and_not (and_not ../signed_in dish_rated) ../add_dish)}}
-                    <a href="/restaurant/{{../restaurant_id}}/dish/{{id}}/rate" class="btn btn-secondary">Rate this Dish</a>
+                {{#if dish_ratable}}
+                    <a href="/restaurant/{{../restaurant_id}}/dish/{{d_id}}/rate" class="btn btn-secondary">Rate this Dish</a>
                 {{/if}}
             </td>
             <td class="dish_stars_container">
@@ -22,6 +22,6 @@
         {{/each}}
     </tbody>
 </table>                    
-{{#if (and_not signed_in add_dish)}}
+{{#if dish_addable}}
 <a href="/restaurant/{{restaurant_id}}/add_dish" class="btn btn-secondary">Add a Dish!</a> 
 {{/if}}

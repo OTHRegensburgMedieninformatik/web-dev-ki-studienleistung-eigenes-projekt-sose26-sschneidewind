@@ -49,7 +49,7 @@ const home = {
     }
     const viewData = {
       title: "Critical Restaurant",
-      signed_in: request.session.user_id !== undefined,
+      signed_in: request.session.signed_in,
       name: request.session.name,
       surname: request.session.surname,
       restaurants: restaurants,

@@ -35,14 +35,14 @@ const restaurant_store = {
     },
 
     async get_restaurant_ratings(rest_id) {
-        const query1 = "select * from restaurant_ratings where r_id=$1";
+        const query1 = "select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=$1";
         const query2 = "select avg(stars) as avg_stars from restaurant_ratings where r_id=$1 group by r_id"
         const values = [rest_id];
         try {
             let response1 = await dataStoreClient.query(query1, values);
             let response2 = await dataStoreClient.query(query2, values);
             if (response1.rows[0] !== undefined) { //the dish exists and there is at least one rating
-                return [response1.rows, parseFloat(response2.rows[0].avg_stars)];
+                return [response1.rows.map(row => ({...row, time: new Date(row.time).toLocaleDateString('de-DE', {day:'2-digit', month: '2-digit', year:'numeric'})})), parseFloat(response2.rows[0].avg_stars)];
             } else {
                 logger.info("Error, ratings for the restaurant "+rest_id+" were not found!");
                 return undefined;

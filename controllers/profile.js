@@ -4,7 +4,7 @@ const user_store = require("../models/user_store.js")
 function make_view_data(title, request) {
   return {
       title: title,
-      signed_in: request.session.user_id !== undefined,
+      signed_in: request.session.signed_in,
       name: request.session.name,
       surname: request.session.surname,
       email: request.session.email,
@@ -30,7 +30,7 @@ const profile = {
     logger.info("Rendering customer profile for " + request.session.name);
     const viewData = {
         title: "Profile of " + request.session.name,
-        signed_in: request.session.user_id !== undefined,
+        signed_in: request.session.signed_in,
         name: request.session.name,
         surname: request.session.surname,
         restaurant_reviews: await user_store.get_user_dish_or_restaurant_ratings(request.session.user_id, false), //getting the rated restaurants
