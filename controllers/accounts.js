@@ -14,7 +14,6 @@ async function extract_user_info(request, user) { //
     let dish_response = await user_store.get_already_rated_dishes_restaurants(user.id);
     request.session.rated_restaurants = restaurant_response !== undefined ? restaurant_response : [];
     request.session.rated_dishes = dish_response !== undefined ? dish_response : [];
-    request.session.save(); //this is required because else the arrays for rated_dishes and rated_restaurants are not saved
 }
 
 const accounts = {
@@ -36,7 +35,7 @@ const accounts = {
         const user = request.body;
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) { //if user was correctly added returns to the last url or the home if the site was directly accessed over the login page
-            extract_user_info(request, user);
+            await extract_user_info(request, user);
             if (request.session !== undefined && request.session.last_url !== undefined)
                 response.redirect(request.session.last_url);
             else
@@ -72,7 +71,7 @@ const accounts = {
     async authenticate(request, response) {
         const user = await user_store.authenticate(request.body.email, request.body.password);
         if (user !== undefined) { //if it could correctly get a user save the user information in the session (all needed later) and redirect
-            extract_user_info(request, user);
+            await extract_user_info(request, user);
             if (request.session !== undefined && request.session.last_url !== undefined) 
                 response.redirect(request.session.last_url);
             else

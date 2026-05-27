@@ -4,7 +4,7 @@
         <tr>
             <td style="width:140px;"> 
                 <div class="dish_container">
-                    <img class="dish_image" src="{{dish_picture}}">
+                    <img class="dish_image" src="/images/dishes{{image}}">
                 </div>
             </td>
             <td class="dish_details">
@@ -16,7 +16,7 @@
                 {{/if}}
             </td>
             <td class="dish_stars_container">
-                <p class="dish_stars">{{{stars avg_rating}}}</p>
+                <p class="dish_stars">{{#if avg_rating}}{{{stars avg_rating}}}{{else}}No reviews yet!{{/if}}</p>
             </td>
         </tr>
         {{/each}}

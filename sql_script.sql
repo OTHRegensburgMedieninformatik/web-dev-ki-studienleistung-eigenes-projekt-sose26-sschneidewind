@@ -18,7 +18,7 @@ create table users(
 );
 
 insert into users(email, name, surname, street, postal_code, city, country, password) values
-	('max_mustermann@gmail.com', 'Max', 'Mustermann', 'Schubertstraße 24', 93053, 'Regensburg', 'Deutschland', '987654321'),
+	('max_mustermann@gmail.com', 'Max', 'Mustermann', 'Schubertstraße 24', 93053, 'Regensburg', 'Deutschland', '999'),
 	('moritz_mustermann@gmail.com', 'Moritz', 'Mustermann', 'Schubertstraße 25', 93053, 'Regensburg', 'Deutschland', '123456789'),
 	('mina_mustermann@gmail.com', 'Mina', 'Mustermann', 'Schubertstraße 30', 93053, 'Regensburg', 'Deutschland', '147258369'),
 	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '123');
@@ -29,14 +29,15 @@ create table restaurants(
 	street text not null,
 	postal_code int not null,
 	city text not null,
-	country text not null
+	country text not null,
+	image text
 );
 
-insert into restaurants(name, street, postal_code, city, country) values
-	('Luigis Pizzeria', 'Ägidienplatz 1', 93047, 'Regensburg', 'Germany'),
-	('Marios Nudel Restaurant', 'Friedrich-Ebert-Straße 15', 93051, 'Regensburg', 'Deutschland'),
-	('The not-leaky Cauldron', 'Burgunderstraße 25', 93053, 'Regensburg', 'Deutschland'),
-	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland');
+insert into restaurants(name, street, postal_code, city, country, image) values
+	('Luigis Pizzeria', 'Ägidienplatz 1', 93047, 'Regensburg', 'Germany', '/1.png'),
+	('Marios Nudel Restaurant', 'Friedrich-Ebert-Straße 15', 93051, 'Regensburg', 'Deutschland', '/2.png'),
+	('The not-leaky Cauldron', 'Burgunderstraße 25', 93053, 'Regensburg', 'Deutschland', '/no_image.png'),
+	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '/no_image.png');
 
 create table keywords(
 	r_id int references restaurants(id),
@@ -60,17 +61,18 @@ create table dishes(
 	primary key (d_id, r_id),
 	name text not null,
 	price decimal(6,2) not null,
-	description text
+	description text,
+	image text
 );
 
-insert into dishes(name, r_id, d_id, price, description) values
-	('Pizza Margherita', 1, 1, 5.99, 'Tomato Sauce, Mozzarella'),
-	('Pizza Tonno', 1, 2, 7.99, 'Tomato Sauce, Mozzarella, Tuna, Onions'),
-	('Noodles Red and White', 2, 1, 3.99, 'Noodles with Ketchup and Mayonnaise'),
-	('Spaghetti Carbonara', 2, 2, 5.99, 'Spaghetti with a creamy sauce and diced ham'),
-	('Soup Soup Soup', 3, 1, 9.99, 'Special Soup... Let us surprise you!'),
-	('Leaky House Soup', 3, 2, 7.99, 'Leaky Soup'),
-	('House Leaky Soup', 3, 3, 8.99, 'Soup of the House');
+insert into dishes(name, r_id, d_id, price, description, image) values
+	('Pizza Margherita', 1, 1, 5.99, 'Tomato Sauce, Mozzarella', '/1/1.png'),
+	('Pizza Tonno', 1, 2, 7.99, 'Tomato Sauce, Mozzarella, Tuna, Onions', '/1/2.png'),
+	('Noodles Red and White', 2, 1, 3.99, 'Noodles with Ketchup and Mayonnaise', '/2/1.png'),
+	('Spaghetti Carbonara', 2, 2, 5.99, 'Spaghetti with a creamy sauce and diced ham', '/no_image.png'),
+	('Soup Soup Soup', 3, 1, 9.99, 'Special Soup... Let us surprise you!', '/3/1.png'),
+	('Leaky House Soup', 3, 2, 7.99, 'Leaky Soup', '/no_image.png'),
+	('House Leaky Soup', 3, 3, 8.99, 'Soup of the House', '/no_image.png');
 
 create table restaurant_ratings(
 	u_id int references users(id),

@@ -6,7 +6,7 @@ const logger = require("../utils/logger.js");
 
 const dish_store = {
     async get_dishes(rest_id) {
-        const query = "select * from dishes where r_id=$1";
+        const query = "select dishes.r_id, dishes.d_id, dishes.name, dishes.price, dishes.description, dishes.image, avg(dish_ratings.stars) as avg_rating from dishes left join dish_ratings on (dishes.d_id = dish_ratings.d_id) and (dishes.r_id = dish_ratings.r_id) where dishes.r_id=$1 group by dishes.r_id, dishes.d_id, dishes.name, dishes.price, dishes.description, dishes.image"; //query that also gets the star ratings
         const values = [rest_id];
         try {
             let response = await dataStoreClient.query(query, values);
