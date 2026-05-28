@@ -1,6 +1,5 @@
 const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
-const dish_store = require("../models/dish_store.js");
 
 async function make_view_data(request, response, rest_id) {
     let restaurant_data = await restaurant_store.get_restaurant(rest_id);
@@ -14,7 +13,7 @@ async function make_view_data(request, response, rest_id) {
     logger.info(already_rated);
     logger.info(request.session.rated_restaurants);
 
-    let dishes =  await dish_store.get_dishes(rest_id);
+    let dishes =  await restaurant_store.get_dishes(rest_id);
     let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
     const combined = dishes !== undefined ? 
         dishes.map(row => //go over each row
@@ -76,7 +75,8 @@ const restaurant = {
         //add the rated restaurant into the currently rated restaurants so we do not have to do another database query
         request.session.rated_restaurants.push(parseInt(rest_id)); //set current restaurant rated to true
         //render same restaurant again
-        await restaurant.index(request, response);
+        let base_url = "/restaurant/" + rest_id;
+        response.redirect(base_url);
     },
 
     async add_dish(request, response) {
@@ -85,9 +85,11 @@ const restaurant = {
         //save the new dish into the database
         logger.info("The dish to add is:");
         logger.info(request.body);
-        dish_store.add_dish(dish, rest_id);
+        restaurant_store.add_dish(dish, rest_id);
+        request.path = "/restaurant/"+rest_id;
         //render the same restaurant again
-        await restaurant.index(request, response);
+        let base_url = "/restaurant/" + rest_id
+        response.redirect(base_url);    
     }
 };
 
