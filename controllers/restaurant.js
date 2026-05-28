@@ -67,32 +67,27 @@ const restaurant = {
     },
 
     async add_rating(request, response) {
+        //persist the rating into the database
         let rest_id = request.params.id;
-        //add rating into the database
-
-        //render same restaurant again
+        let rating = request.body;
+        logger.info("The rating to add is:")
+        logger.info(rating);
+        restaurant_store.rate_restaurant(request.session.user_id, rest_id, rating);
+        //add the rated restaurant into the currently rated restaurants so we do not have to do another database query
         request.session.rated_restaurants.push(parseInt(rest_id)); //set current restaurant rated to true
+        //render same restaurant again
         await restaurant.index(request, response);
     },
 
     async add_dish(request, response) {
         let rest_id = request.params.id;
+        let dish = request.body;
         //save the new dish into the database
-
+        logger.info("The dish to add is:");
+        logger.info(request.body);
+        dish_store.add_dish(dish, rest_id);
         //render the same restaurant again
-        let base_url = "/restaurant/"+rest_id
-        request.session.last_url = base_url;
-        let rate_link = base_url+"/rate";
-        let add_link = base_url+"/add_dish";
-        if (request.session.rated_restaurants != undefined) {
-            already_rated = request.session.rated_restaurants.includes(rest_id);
-        } else already_rated = false;
-        let viewData = await make_view_data(request, response, rest_id); 
-        viewData.rate = (request.path === rate_link && !already_rated),
-        viewData.rate_link = rate_link,
-        viewData.dish_addable = false,
-        viewData.adding_dish = true,
-        response.render("restaurant", viewData)
+        await restaurant.index(request, response);
     }
 };
 

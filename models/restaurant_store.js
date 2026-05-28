@@ -56,7 +56,7 @@ const restaurant_store = {
 
     async rate_restaurant(user_id, rest_id, rating) {
         const query = "insert into restaurant_ratings(u_id, r_id, stars, text) values ($1, $2, $3, $4)";
-        const values = [user_id, rest_id, rating.stars, rating.description];
+        const values = [user_id, rest_id, rating.number_of_stars, rating.text];
         try {
             let response = await dataStoreClient.query(query, values);
             return [0,0];
