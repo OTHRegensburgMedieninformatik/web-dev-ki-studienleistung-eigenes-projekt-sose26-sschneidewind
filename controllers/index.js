@@ -36,10 +36,10 @@ function get_local_dishes(email) {
   ]
 }
 
-const home = {
+const index = {
   index(request, response) {
     request.session.last_url = "/";
-    logger.info("home rendering, name is: " + request.session.name);
+    logger.info("index rendering, name is: " + request.session.name);
     if (request.session.signed_in) {
       restaurants = get_local_restaurants(request.session.email);
       dishes = get_local_dishes(request.session.email);
@@ -55,8 +55,8 @@ const home = {
       restaurants: restaurants,
       dishes: dishes
     };
-    response.render("home", viewData);
+    response.render("index", viewData);
   },
 };
 
-module.exports = home;
+module.exports = index;

@@ -21,7 +21,8 @@ insert into users(email, name, surname, street, postal_code, city, country, pass
 	('max_mustermann@gmail.com', 'Max', 'Mustermann', 'Schubertstraße 24', 93053, 'Regensburg', 'Deutschland', '999'),
 	('moritz_mustermann@gmail.com', 'Moritz', 'Mustermann', 'Schubertstraße 25', 93053, 'Regensburg', 'Deutschland', '123456789'),
 	('mina_mustermann@gmail.com', 'Mina', 'Mustermann', 'Schubertstraße 30', 93053, 'Regensburg', 'Deutschland', '147258369'),
-	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '123');
+	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '123'),
+	('test@g.de', 'Tester', 'McTestFace', 'Galgenbergstraße 32', 93053, 'Regensburg', 'Deutschland', '1');
 
 create table restaurants(
 	id serial primary key,
@@ -159,6 +160,4 @@ select * from restaurant_ratings where r_id=1
 
 select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=1;
 
-select * from dishes
-from dishes join restaurants on dishes.r_id = restaurants.id where dishes.r_id=1 and dishes.d_id=1
-
+select * from dishes join restaurants on dishes.r_id = restaurants.id where dishes.r_id=1 and dishes.d_id=1

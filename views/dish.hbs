@@ -11,8 +11,9 @@
             <div class="card mt-3">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h3><a href="/restaurant/{{rest_id}}">{{rest_name}}</a>   {{{stars restaurant_stars}}}</h3>
-                        {{#if (and (and_not signed_in rate) (and_not signed_in restaurant_rated))}}<a href="/restaurant/{{rest_id}}/rate" class="btn btn-secondary">Rate this Restaurant</a>{{/if}}
+                        <h3><a href="/restaurant/{{rest_id}}">{{rest_name}}</a> |
+                        {{#if rest_ratings_exist}} {{{stars rest_stars}}} {{/if}}</h3>
+                        {{#if rest_rateable}}<a href="/restaurant/{{rest_id}}/rate" class="btn btn-secondary">Rate this Restaurant</a>{{/if}}
                     </div>
                 </div>
                 <div class="card-body">
@@ -26,28 +27,29 @@
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-10 d-flex flex-column justify-content-center">
-                                                <h3>{{dish_name}} | {{price}}€ | {{{stars stars}}}</h3>
+                                                <h3>{{dish_name}} | {{price}}€ | {{#if dish_ratings_exist }} {{{stars dish_stars}}} {{else}} No ratings yet! {{/if}} </h3>
                                                 <p class="mb-0">{{description}}</p>
                                             </div>
                                             <div class="col-2 d-flex flex-column align-items-center justify-content-center">
-                                                {{#if (and (and_not signed_in rate) (and_not signed_in dish_rated))}}
+                                                {{#if dish_rateable}}
                                                     <a href="/restaurant/{{rest_id}}/dish/{{dish_id}}/rate" class="btn btn-secondary">Rate this dish!</a> 
                                                 {{/if}}                                            
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        {{#if (and (and signed_in rate) (and_not signed_in dish_rated))}}
+                                        {{#if currently_rating}}
                                             {{>rating href=rate_link}}
-                                        {{else}}  
+                                        {{/if}}
+                                        {{#if dish_ratings_exist}}  
                                             <table class="table table-bordered">
                                                 <tbody>
-                                                    {{#each ratings}}
+                                                    {{#each dish_ratings}}
                                                     <tr>
-                                                        <td>{{date}}</td>
+                                                        <td>{{time}}</td>
                                                         <td>{{name}}</td>
                                                         <td>{{{stars stars}}}</td>
-                                                        <td>{{description}}</td>
+                                                        <td>{{text}}</td>
                                                     </tr>
                                                     {{/each}}
                                                 </tbody>

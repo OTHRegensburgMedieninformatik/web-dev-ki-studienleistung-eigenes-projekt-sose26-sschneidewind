@@ -23,7 +23,7 @@ const dish_store = {
     },
 
     async get_dish_ratings(rest_id, dish_id) {
-        const query1 = "select * from dish_ratings where r_id=$1 and d_id=$2";
+        const query1 = "select * from dish_ratings join users on dish_ratings.u_id = users.id where r_id=$1 and d_id=$2";
         const query2 = "select avg(stars) as avg_stars from dish_ratings where r_id=$1 and d_id=$2 group by d_id"
         const values = [rest_id, dish_id];
         try {
@@ -43,7 +43,7 @@ const dish_store = {
 
     async rate_dish(user_id, rest_id, dish_id, rating) {
         const query = "insert into dish_ratings(u_id, r_id, d_id, stars, text) values ($1, $2, $3, $4, $5)";
-        const values = [user_id, rest_id, dish_id, rating.stars, rating.text];
+        const values = [user_id, rest_id, dish_id, rating.number_of_stars, rating.text];
         try {
             await dataStoreClient.query(query, values);
             return [0,0];

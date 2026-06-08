@@ -10,9 +10,14 @@ const dishes = {
         let dish_ratings = await dish_store.get_dish_ratings(rest_id, dish_id);
         let rest_information = await rest_store.get_restaurant(rest_id);
         let rest_ratings = await rest_store.get_restaurant_ratings(rest_id);
+
+        //terminate if the specified restaurant or dish does not exist
+        if (dish_information === undefined || rest_information === undefined)
+            response.redirect("/");
+
         logger.info("INFO")
-        logger.info(dish_information)
-        logger.info(rest_information)
+        logger.info(dish_ratings)
+        logger.info(rest_ratings)
         let rate_link = "/restaurant/"+rest_id+"/dish/"+dish_id+"/rate";
         request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
 
@@ -24,7 +29,14 @@ const dishes = {
             dish_already_rated = request.session.rated_dishes.some(([r_id, d_id]) => r_id == rest_id && d_id == dish_id);
         } else dish_already_rated = false;
 
+        const dish_ratings_exist = dish_ratings !== undefined;
+        const rest_ratings_exist = rest_ratings !== undefined;
+
+        const dish_rateable = request.session.rated_dishes ? !request.session.rated_dishes.some(([r_id, d_id]) => rest_id == r_id && dish_id == d_id): false;
+        const rest_rateable = request.session.rated_restaurants ? !request.session.rated_restaurants.includes(parseInt(rest_id)) : false;
+
         const viewData = {
+            //basic information concerning dish
             title: "Dish "+dish_information.name,
             dish_id: dish_id,
             rest_id: rest_id,
@@ -33,16 +45,22 @@ const dishes = {
             dish_image: "/images/dishes"+dish_information.image,
             price: dish_information.price,
             description: dish_information.description,
-            stars: dish_ratings[1],
-            ratings: dish_ratings[0],
-            restaurant_stars: rest_information[1],
+            
+            //for the ratings
+            dish_ratings_exist : dish_ratings_exist,
+            dish_stars: dish_ratings_exist ? dish_ratings[1] : 0,
+            dish_ratings: dish_ratings_exist ? dish_ratings[0] : null,
+            rest_ratings_exist : rest_ratings_exist,
+            rest_stars: rest_ratings_exist ? rest_ratings[1] : 0,
+            dish_rateable : dish_rateable,
+            rest_rateable : rest_rateable,
+            currently_rating : (request.path === rate_link) && (dish_rateable),
+            rate_link: rate_link,
+
+            //basic information concerning user
             signed_in: request.session.signed_in,
             name: request.session.name,
             surname: request.session.surname,
-            rate: (request.path === rate_link),
-            rate_link: rate_link,
-            restaurant_rated: rest_already_rated,
-            dish_rated: dish_already_rated
         }
         logger.info(request.session.rated_dishes);
         response.render("dish", viewData);
@@ -51,41 +69,15 @@ const dishes = {
     add_rating(request, response) {
         let dish_id = request.params.dish_id;
         let rest_id = request.params.restaurant_id;
-        let information = get_dish_info(rest_id, dish_id);
-        request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
-        let rate_link = "/restaurant/"+rest_id+"/dish/"+dish_id+"/rate";
+        let base_url = "/restaurant/"+rest_id+"/dish/"+dish_id
 
-        if (request.session.rated_restaurants != undefined) {
-            rest_already_rated = request.session.rated_restaurants.includes(rest_id);
-        } else rest_already_rated = false;
-
+        let rating = request.body;
+        logger.info("The rating to add is:")
+        logger.info(rating);
+        dish_store.rate_dish(request.session.user_id, rest_id, dish_id, rating)
         request.session.rated_dishes.push([rest_id, dish_id]);
 
-        const viewData = {
-            title: "Dish "+information.dish_name,
-            dish_id: dish_id,
-            rest_id: rest_id,
-            dish_name: information.dish_name,
-            rest_name: information.rest_name,
-            dish_image: information.dish_picture,
-            price: information.price,
-            description: information.description,
-            stars: information.avg_rating,
-            ratings: [
-                {date: "15.07.2025", name: "Max Mustermann", stars: 5, description: "Great Pizza"},
-                {date: "17.07.2025", name: "Maximilian", stars: 3, description: "Meh, average"},
-                {date: "19.07.2025", name: "Type 1", stars: 4.5, description: "Realy Great"}
-            ],
-            restaurant_stars: information.restaurant_stars,
-            signed_in: request.session.signed_in,
-            name: request.session.name,
-            surname: request.session.surname,
-            rate: false,
-            restaurant_rated: rest_already_rated,
-            dish_rated: true,
-        }
-        logger.info(request.session.rated_dishes);
-        response.render("dish", viewData);
+        response.redirect(base_url);
     },
 }
 

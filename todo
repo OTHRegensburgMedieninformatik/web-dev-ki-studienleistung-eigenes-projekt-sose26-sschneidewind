@@ -1,10 +1,7 @@
 finish adding the full database functionality
-    include into restaurants --> add dishes rated functionality (DONE)
-                             --> adding dishes / adding ratings functionality
-    include into dishes
+    delete reviews from profile, better display in profile view
     much much testing
 
-protect routes where not logged in users should not have access
-
+search function
 admin functionality?
 leaflet map + coordinate api

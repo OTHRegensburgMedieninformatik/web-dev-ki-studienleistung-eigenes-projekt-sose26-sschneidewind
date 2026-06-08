@@ -1,48 +1,6 @@
 const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
 
-async function make_view_data(request, response, rest_id) {
-    let restaurant_data = await restaurant_store.get_restaurant(rest_id);
-    if (restaurant_data === undefined) {
-        logger.info("Something went horribly wrong!");
-        response.redirect("/");
-    }
-    let already_rated = false;
-    if (request.session.rated_restaurants !== undefined)
-        already_rated = request.session.rated_restaurants.includes(parseInt(rest_id));
-    logger.info(already_rated);
-    logger.info(request.session.rated_restaurants);
-
-    let dishes =  await restaurant_store.get_dishes(rest_id);
-    let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
-    const combined = dishes !== undefined ? 
-        dishes.map(row => //go over each row
-            ({ ...row, //get all the parameters of the row
-                dish_ratable : request.session.rated_dishes !== undefined ?  //add a new parameter called dish_rated which is false if rated_dishes of the session is undefined
-                    !(request.session.rated_dishes.some(([r_id, d_id]) => r_id == row.r_id && d_id == row.d_id)) //evaluate if there is a r_id d_id combo inside of the rated dishes
-                    : false
-            })
-        ) : [];
-    logger.info(combined);
-    
-    const ratings_exist = ratings !== undefined;
-
-    return {
-        title: "restaurant "+restaurant_data.name,
-        restaurant_name: restaurant_data.name,
-        restaurant_image: "/images/restaurants"+restaurant_data.image,
-        restaurant_dishes: combined,
-        show_restaurant_stars: ratings_exist ? ratings[1] !== undefined : false,
-        restaurant_stars: ratings_exist ? ratings[1] : -1,
-        restaurant_ratings: ratings_exist ? ratings[0] : [],
-        restaurant_id: request.params.id,
-        signed_in: request.session.signed_in,
-        name: request.session.name,
-        surname: request.session.surname,
-        show_rate_button : !already_rated && request.session.signed_in,
-    }
-}
-
 const restaurant = {
     async index(request, response){
         let rest_id = request.params.id;
@@ -51,17 +9,56 @@ const restaurant = {
         let rate_link = base_url+"/rate";
         let add_link = base_url+"/add_dish";
 
-        let viewData = await make_view_data(request, response, rest_id);
+        //getting restaurant data and terminating if there is no restaurant data as well as ratings data
+        let restaurant_data = await restaurant_store.get_restaurant(rest_id);
+        if (restaurant_data === undefined) {
+            logger.info("Something went horribly wrong!");
+            response.redirect("/");
+        }
+        let dishes =  await restaurant_store.get_dishes(rest_id);
+        let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
+        const combined = dishes !== undefined ? 
+            dishes.map(row => //go over each row
+                ({ ...row, //get all the parameters of the row
+                    dish_ratable : request.session.rated_dishes !== undefined ?  //add a new parameter called dish_ratable which is false if rated_dishes of the session is undefined
+                        !(request.session.rated_dishes.some(([r_id, d_id]) => r_id == row.r_id && d_id == row.d_id)) //evaluate if there is a r_id d_id combo inside rated dishes
+                        : false
+                })
+            ) : [];
+        logger.info(combined);
         
+        //logic helper for the viewData
         let already_rated = false;
         if (request.session.rated_restaurants !== undefined)
             already_rated = request.session.rated_restaurants.includes(parseInt(rest_id));
+        const ratings_exist = ratings !== undefined;
 
-        viewData.rate = (request.path === rate_link && !already_rated);
-        viewData.rate_link = rate_link;
-        viewData.dish_addable = (request.path !== add_link) && request.session.signed_in; //needs to be protected because is true else
-        viewData.adding_dish = request.path === add_link; //only accessible if authenticated so needs no extra protection
-        viewData.add_link = add_link;
+        const viewData = {
+            //restaurant data
+            title: "restaurant "+restaurant_data.name,
+            restaurant_name: restaurant_data.name,
+            restaurant_image: "/images/restaurants"+restaurant_data.image,
+            restaurant_dishes: combined,
+
+            //rating data
+            ratings_exist: ratings_exist,
+            restaurant_stars: ratings_exist ? ratings[1] : -1,
+            restaurant_ratings: ratings_exist ? ratings[0] : [],
+
+            //user data
+            restaurant_id: request.params.id,
+            signed_in: request.session.signed_in,
+            name: request.session.name,
+            surname: request.session.surname,
+
+            //logic stuff
+            show_rate_button : !already_rated && request.session.signed_in,
+            rate : (request.path === rate_link) && (!already_rated),
+            rate_link : rate_link,
+            dish_addable : (request.path !== add_link) && request.session.signed_in, //needs to be protected because is true else
+            adding_dish : request.path === add_link, //only accessible if authenticated so needs no extra protection
+            add_link : add_link,
+        }
         response.render("restaurant", viewData);
     },
 

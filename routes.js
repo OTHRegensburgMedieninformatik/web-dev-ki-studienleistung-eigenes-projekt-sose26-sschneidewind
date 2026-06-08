@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const auth  = require("./utils/auth.js")
 
-const home = require("./controllers/home.js");
+const index = require("./controllers/index.js");
 const about = require("./controllers/about.js");
 const accounts = require("./controllers/accounts.js")
 const profile = require("./controllers/profile.js")
 const restaurant = require("./controllers/restaurant.js")
 const dishes = require("./controllers/dishes.js")
 
-router.get("/", home.index);
+router.get("/", index.index);
 router.get("/about", about.index);
 
 router.get("/signup", accounts.signup);
