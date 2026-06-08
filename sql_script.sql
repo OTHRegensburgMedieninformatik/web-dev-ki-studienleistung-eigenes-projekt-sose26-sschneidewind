@@ -159,3 +159,6 @@ select * from restaurant_ratings where r_id=1
 
 select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=1;
 
+select * from dishes
+from dishes join restaurants on dishes.r_id = restaurants.id where dishes.r_id=1 and dishes.d_id=1
+

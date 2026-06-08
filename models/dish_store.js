@@ -30,9 +30,9 @@ const dish_store = {
             let response1 = await dataStoreClient.query(query1, values);
             let response2 = await dataStoreClient.query(query2, values);
             if (response1.rows[0] !== undefined) { //the dish exists and there is at least one rating
-                return [response1.rows, parseFloat(response2.rows[0].avg_stars)];
+                return [response1.rows.map(row => ({...row, time: new Date(row.time).toLocaleDateString('de-DE', {day:'2-digit', month: '2-digit', year:'numeric'})})), parseFloat(response2.rows[0].avg_stars)];
             } else {
-                logger.info("Error, ratings for the dish "+dish_id+" of restaurant "+rest_id+" was not found!");
+                logger.info("There are no ratings for the dish "+dish_id+" of restaurant "+rest_id+"!");
                 return undefined;
             }
         } catch(e) {
