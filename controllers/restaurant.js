@@ -13,7 +13,7 @@ const restaurant = {
         let restaurant_data = await restaurant_store.get_restaurant(rest_id);
         if (restaurant_data === undefined) {
             logger.info("Something went horribly wrong!");
-            response.redirect("/");
+            return response.redirect("/");
         }
         let dishes =  await restaurant_store.get_dishes(rest_id);
         let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
@@ -31,6 +31,7 @@ const restaurant = {
         let already_rated = false;
         if (request.session.rated_restaurants !== undefined)
             already_rated = request.session.rated_restaurants.includes(parseInt(rest_id));
+        logger.info(request.session.rated_dishes);
         const ratings_exist = ratings !== undefined;
 
         const viewData = {
@@ -87,7 +88,31 @@ const restaurant = {
         //render the same restaurant again
         let base_url = "/restaurant/" + rest_id
         response.redirect(base_url);    
-    }
+    },
+
+    async add_restaurant(request, response) {
+
+    },
+
+    async delete_rating(request, response) {
+        const user_id = request.params.user_id;
+        const rest_id = request.params.restaurant_id;
+        logger.info("Deleting rating for restaurant "+rest_id);
+        if (parseInt(user_id) !== request.session.user_id) { //if user a tries to delete a rating of user b
+            logger.info(user_id);
+            logger.info(request.session.user_id);
+            return response.redirect("/");
+        }
+        
+        const resp = await restaurant_store.delete_rating(user_id, rest_id);
+        if (resp[0] === 0) {
+            request.session.rated_restaurants = request.session.rated_restaurants.filter(x => x !== parseInt(rest_id));
+        } else {
+            logger.info("There was an error:");
+            logger.info(resp[1])
+        }
+        response.redirect("/profile");
+    },
 };
 
 module.exports = restaurant;

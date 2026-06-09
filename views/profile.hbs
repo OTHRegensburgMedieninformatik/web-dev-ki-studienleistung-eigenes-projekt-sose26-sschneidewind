@@ -17,6 +17,7 @@
                                         <th>Restaurant</th>
                                         <th>Sterne</th>
                                         <th>Fließtext</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -25,6 +26,9 @@
                                         <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
                                         <td>{{{stars stars}}}</td>
                                         <td>{{string}}</td>
+                                        <td><a class="button btn-secondary" href="/restaurant/{{rest_id}}/user/{{../user_id}}/delete_rating">
+                                            <i class="bi bi-trash"></i>
+                                        </a></td>
                                     </tr>
                                 </tbody>
                                 {{/each}}
@@ -39,6 +43,7 @@
                                         <th>Dish</th>
                                         <th>Sterne</th>
                                         <th>Fließtext</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,6 +53,9 @@
                                         <td><a id="dish_{{place}}" href="/restaurant/{{rest_id}}/dish/{{dish_id}}">{{dish}}</a></td>
                                         <td style="white-space: nowrap;">{{{stars stars}}}</td>
                                         <td>{{string}}</td>
+                                        <td><a class="button btn-secondary" href="/restaurant/{{rest_id}}/dish/{{dish_id}}/user/{{../user_id}}/delete_rating">
+                                            <i class="bi bi-trash"></i>
+                                        </a></td>
                                     </tr>
                                 </tbody>
                                 {{/each}}

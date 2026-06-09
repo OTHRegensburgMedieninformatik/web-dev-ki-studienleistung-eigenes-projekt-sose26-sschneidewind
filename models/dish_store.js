@@ -52,6 +52,18 @@ const dish_store = {
             return [1, e];
         }
     },
+
+    async delete_rating(user_id, rest_id, dish_id) {
+        const query = "delete from dish_ratings where u_id=$1 and r_id=$2 and d_id=$3"
+        const values = [user_id, rest_id, dish_id];
+        try {
+            await dataStoreClient.query(query, values);
+            return [0,0];
+        } catch(e) {
+            logger.info("Deleting Rating for the dish "+dish_id+" of the restaurant "+rest_id+" by user "+user_id+"Returned error "+e);
+            return [1,e];
+        }
+    },
 }
 
 module.exports = dish_store;

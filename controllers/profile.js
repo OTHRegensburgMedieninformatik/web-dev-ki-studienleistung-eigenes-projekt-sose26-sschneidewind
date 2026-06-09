@@ -33,6 +33,7 @@ const profile = {
         signed_in: request.session.signed_in,
         name: request.session.name,
         surname: request.session.surname,
+        user_id: request.session.user_id,
         restaurant_reviews: await user_store.get_user_dish_or_restaurant_ratings(request.session.user_id, false), //getting the rated restaurants
         dish_reviews: await user_store.get_user_dish_or_restaurant_ratings(request.session.user_id, true), //getting the rated dishes
     };

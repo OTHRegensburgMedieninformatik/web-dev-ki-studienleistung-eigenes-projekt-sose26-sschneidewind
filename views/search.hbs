@@ -1,0 +1,13 @@
+<body>
+
+    {{#if signed_in}}
+        {{> menu id="/" name=name surname=surname}}
+    {{else}}
+        {{> welcomemenu id="search"}}
+    {{/if}}
+
+    <main>
+        <div class="container-fluid h-100">
+        </div>
+    </main>
+</body>

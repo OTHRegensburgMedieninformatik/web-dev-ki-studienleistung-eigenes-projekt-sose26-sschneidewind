@@ -8,6 +8,7 @@ const accounts = require("./controllers/accounts.js")
 const profile = require("./controllers/profile.js")
 const restaurant = require("./controllers/restaurant.js")
 const dishes = require("./controllers/dishes.js")
+const search = require("./controllers/search.js")
 
 router.get("/", index.index);
 router.get("/about", about.index);
@@ -27,8 +28,15 @@ router.get("/restaurant/:id/rate", auth.protected, restaurant.index);
 router.get("/restaurant/:id/add_dish", auth.protected, restaurant.index);
 router.post("/restaurant/:id/add_dish", auth.protected, restaurant.add_dish);
 router.post("/restaurant/:id/rate", auth.protected, restaurant.add_rating);
+router.get("/restaurant/:restaurant_id/user/:user_id/delete_rating", auth.protected, restaurant.delete_rating);
+
 router.get("/restaurant/:restaurant_id/dish/:dish_id", dishes.index);
 router.get("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dishes.index);
 router.post("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dishes.add_rating);
+router.get("/restaurant/:restaurant_id/dish/:dish_id/user/:user_id/delete_rating", auth.protected, dishes.delete_rating);
+
+router.get("/add_restaurant", auth.protected, restaurant.add_restaurant);
+
+router.get("/search", search.index);
 
 module.exports = router;

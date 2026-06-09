@@ -79,6 +79,26 @@ const dishes = {
 
         response.redirect(base_url);
     },
+
+    async delete_rating(request, response) {
+        const user_id = request.params.user_id;
+        const rest_id = request.params.restaurant_id;
+        const dish_id = request.params.dish_id;
+        logger.info("Deleting rating for restaurant "+rest_id+ " and dish "+dish_id);
+        if (parseInt(user_id) !== request.session.user_id) { //if user a tries to delete a rating of user b
+            return response.redirect("/");
+        }
+        
+        const resp = await dish_store.delete_rating(user_id, rest_id, dish_id);
+        if (resp[0] === 0) {
+            request.session.rated_dishes = request.session.rated_dishes.filter(([r_id, d_id]) => !(parseInt(r_id) === parseInt(rest_id) && parseInt(d_id) === parseInt(dish_id)));
+        } else {
+            logger.info("There was an error:");
+            logger.info(resp[1])
+        }
+        logger.info(request.session.rated_dishes);
+        response.redirect("/profile");
+    },
 }
 
 module.exports = dishes;
