@@ -33,7 +33,7 @@ const accounts = {
     },
 
     async register(request, response) {
-        const user = request.body;
+        const user = request.body; //work to do
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) { //if user was correctly added returns to the last url or the home if the site was directly accessed over the login page
             await extract_user_info(request, user);
