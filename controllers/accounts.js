@@ -33,9 +33,10 @@ const accounts = {
     },
 
     async register(request, response) {
-        const user = request.body; //work to do
+        let user = request.body;
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) { //if user was correctly added returns to the last url or the home if the site was directly accessed over the login page
+            user = await user_store.authenticate(request.body.email, request.body.password); //redefine user to the user logged in with the current credentials (just getting the new values, p.ex. user_id since this is defined by the database and cannot be determined without another query)
             await extract_user_info(request, user);
             if (request.session !== undefined && request.session.last_url !== undefined)
                 response.redirect(request.session.last_url);

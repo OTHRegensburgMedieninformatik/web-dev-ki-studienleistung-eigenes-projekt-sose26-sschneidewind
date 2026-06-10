@@ -1,22 +1,6 @@
 const logger = require("../utils/logger.js");
-
-function get_global_restaurants() {
-  //just get best global restaurants
-  return [
-    {place: 1, restaurant: "Luigis Pizzeria", rest_id:1},
-    {place: 2, restaurant: "Marios Nudel Restaurant", rest_id:2},
-    {place: 3, restaurant: "Gumbat Rakete", rest_id:3}
-  ]
-}
-
-function get_local_restaurants(email)  {
-  //here will be a lookup for local restaurants near user with email
-  return [
-    {place: 1, restaurant: "Gumbat Rakete", rest_id:3},
-    {place: 2, restaurant: "Marios Nudel Restaurant", rest_id:2},
-    {place: 3, restaurant: "Luigis Pizzeria", rest_id:1}
-  ]
-}
+const restaurant_store = require("../models/restaurant_store.js");
+const dish_store = require("../models/dish_store.js");
 
 function get_global_dishes() {
   //just get globally best performing dishes
@@ -37,22 +21,24 @@ function get_local_dishes(email) {
 }
 
 const index = {
-  index(request, response) {
+  async index(request, response) {
     request.session.last_url = "/";
     logger.info("index rendering, name is: " + request.session.name);
-    if (request.session.signed_in) {
-      restaurants = get_local_restaurants(request.session.email);
-      dishes = get_local_dishes(request.session.email);
-    } else {
-      restaurants = get_global_restaurants();
-      dishes = get_global_dishes();
-    }
+    let restaurants = await restaurant_store.get_top_restaurants(request.session.user_id); //since session.user_id is undefined when not signed in, it automatically handles the login / not logged in distinction :)
+    let dishes = await dish_store.get_top_dishes(request.session.user_id); // same as above
+    restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
+    dishes = dishes ? dishes.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
+
+    logger.info(dishes);
+
     const viewData = {
       title: "Critical Restaurant",
       signed_in: request.session.signed_in,
       name: request.session.name,
       surname: request.session.surname,
+      restaurants_exist: restaurants !== undefined,
       restaurants: restaurants,
+      dishes_exist: dishes !== undefined,
       dishes: dishes
     };
     response.render("index", viewData);

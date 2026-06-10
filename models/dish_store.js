@@ -64,6 +64,27 @@ const dish_store = {
             return [1,e];
         }
     },
+
+    async get_top_dishes(user_id) {
+        const not_logged_in = user_id === undefined;
+        const query = not_logged_in ? 
+        "with result as (select row_number() over (order by avg(stars) desc nulls last) as rank, dishes.r_id, dishes.d_id, avg(stars) as stars, dishes.name as d_name from dish_ratings right join dishes on (dish_ratings.r_id = dishes.r_id and dish_ratings.d_id = dishes.d_id) group by dishes.d_id, dishes.r_id order by stars desc nulls last) select rank, r_id, d_id, stars, d_name, name as r_name, city from result join restaurants on result.r_id = restaurants.id limit 5"
+        :
+        "with user_row as (select * from users where id=$1), result as (select row_number() over (order by avg(stars) desc nulls last) as rank, dishes.r_id, dishes.d_id, avg(stars) as stars, dishes.name as d_name from dish_ratings right join dishes on (dish_ratings.r_id = dishes.r_id and dish_ratings.d_id = dishes.d_id) group by dishes.d_id, dishes.r_id order by stars desc nulls last) select rank, r_id, d_id, stars, d_name, restaurants.name as r_name, restaurants.city from result join restaurants on result.r_id = restaurants.id join user_row on (restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city) limit 5;"
+        const values = not_logged_in ? [] : [user_id];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows;
+            } else {
+                logger.info("Error, there were no dishes!");
+                return undefined;
+            }
+        } catch (e){
+            logger.info("Getting current best dishes returned an error: "+e);
+            return undefined;
+        }
+    },
 }
 
 module.exports = dish_store;

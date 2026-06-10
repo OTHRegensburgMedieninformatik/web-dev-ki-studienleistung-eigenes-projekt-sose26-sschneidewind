@@ -22,7 +22,7 @@ insert into users(email, name, surname, street, postal_code, city, country, pass
 	('moritz_mustermann@gmail.com', 'Moritz', 'Mustermann', 'Schubertstraße 25', 93053, 'Regensburg', 'Deutschland', '123456789'),
 	('mina_mustermann@gmail.com', 'Mina', 'Mustermann', 'Schubertstraße 30', 93053, 'Regensburg', 'Deutschland', '147258369'),
 	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '123'),
-	('test@g.de', 'Tester', 'McTestFace', 'Galgenbergstraße 32', 93053, 'Regensburg', 'Deutschland', '1');
+	('test@g.de', 'Tester', 'McTestFace', 'Galgenbergstraße 32', 99326, 'Kleinhettstedt', 'Deutschland', '1');
 
 create table restaurants(
 	id serial primary key,
@@ -38,7 +38,9 @@ insert into restaurants(name, street, postal_code, city, country, image) values
 	('Luigis Pizzeria', 'Ägidienplatz 1', 93047, 'Regensburg', 'Germany', '/1.png'),
 	('Marios Nudel Restaurant', 'Friedrich-Ebert-Straße 15', 93051, 'Regensburg', 'Deutschland', '/2.png'),
 	('The not-leaky Cauldron', 'Burgunderstraße 25', 93053, 'Regensburg', 'Deutschland', '/no_image.png'),
-	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '/no_image.png');
+	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '/no_image.png'),
+	('Waluigis Pizzeria', 'Teststraße 3', 99326, 'Stadtilm', 'Deutschland', '/no_image.png'),
+	('Warios Italian Cuisine', 'Teststraße 4', 99326, 'Kleinhettstedt', 'Deutschland', '/no_image.png');
 
 create table keywords(
 	r_id int references restaurants(id),
@@ -89,7 +91,8 @@ insert into restaurant_ratings(u_id, r_id, stars, text) values
 	(1, 2, 2, 'The Noodles were cold...'),
 	(2, 1, 5, 'Everything was perfect!'),
 	(2, 3, 4, 'The soups were truly... inspirational'),
-	(3, 2, 4, 'It was interesting to eat these noodles... Certainly special!');
+	(3, 2, 4, 'It was interesting to eat these noodles... Certainly special!'),
+	(4, 5, 5, 'Waaaah!');
 
 create table dish_ratings(
 	u_id int references users(id),
@@ -157,7 +160,24 @@ select avg(stars) as avg_stars from dish_ratings where r_id=3 and d_id=1 group b
 
 select * from restaurant_ratings where r_id=1
 */
+select * from users;
 
 select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=1;
 
-select * from dishes join restaurants on dishes.r_id = restaurants.id where dishes.r_id=1 and dishes.d_id=1
+with result as (
+select row_number() over (order by avg(stars) desc nulls last) as rank, dishes.r_id, dishes.d_id, avg(stars) as stars, dishes.name as d_name
+from dish_ratings right join dishes on (dish_ratings.r_id = dishes.r_id and dish_ratings.d_id = dishes.d_id)
+group by dishes.d_id, dishes.r_id order by stars desc nulls last)
+select rank, r_id, d_id, stars, d_name, name as r_name, city from result join restaurants on result.r_id = restaurants.id limit 5;
+
+with 
+user_row as (select * from users where id=1),
+result as (
+select row_number() over (order by avg(stars) desc nulls last) as rank, dishes.r_id, dishes.d_id, avg(stars) as stars, dishes.name as d_name
+from dish_ratings right join dishes on (dish_ratings.r_id = dishes.r_id and dish_ratings.d_id = dishes.d_id)
+group by dishes.d_id, dishes.r_id order by stars desc nulls last
+)
+select rank, r_id, d_id, stars, d_name, restaurants.name as r_name, restaurants.city
+from result join restaurants on result.r_id = restaurants.id 
+join user_row on (restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city) limit 5;
+

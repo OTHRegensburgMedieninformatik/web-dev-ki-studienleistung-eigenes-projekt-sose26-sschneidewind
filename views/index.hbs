@@ -14,7 +14,7 @@
         </div>
         <div class="card-body h-100 d-flex flex-column">
           <div class="row flex-grow-1 h-100">
-            <div class="col-4 text-center border-end d-flex flex-column justify-content-between h-100">
+            <div class="col-5 text-center border-end d-flex flex-column justify-content-between h-100">
               <div>
                 <p class="card-text">A Website where YOU can rate your favourite places, connect with others and decide on your upcoming culinary adventures!</p>
               </div>
@@ -24,22 +24,30 @@
                 {{else}}
                 <h4>Global Top Restaurants:</h4>
                 {{/if}}
+                {{#if restaurants_exist}}
                 <table class="table table-bordered">
                   <thead>
                       <tr>
                           <th>Place</th>
+                          <th>Stars</th>
                           <th>Restaurant</th>
+                          <th>City</th>
                       </tr>
                   </thead>
                   <tbody>
                     {{#each restaurants}}
                       <tr>
-                          <td>{{place}}.</td>
-                          <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
+                          <td>{{rank}}.</td>
+                          <td>{{#if has_rating}} {{{stars stars}}} {{else}} No Ratings {{/if}}</td>
+                          <td><a id="restaurant_{{rank}}" href="/restaurant/{{id}}">{{name}}</a></td>
+                          <td>{{city}}</td>
                       </tr>
                     {{/each}}
                   </tbody>
                 </table>
+                {{else}}
+                Huh... There seem to be no restaurants entered yet in your area! Be the first to add one!
+                {{/if}}
               </div>
               <div>
                 {{#if signed_in}}
@@ -47,24 +55,32 @@
                 {{else}}
                 <h4>Global Top Dishes:</h4>
                 {{/if}}
+                {{#if dishes_exist}}
                 <table class="table table-bordered">
                   <thead>
                       <tr>
                           <th>Place</th>
+                          <th>Stars</th>
                           <th>Restaurant</th>
                           <th>Dish</th>
+                          <th>City</th>
                       </tr>
                   </thead>
                   <tbody>
                     {{#each dishes}}
                       <tr>
-                          <td>{{place}}.</td>
-                          <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
-                          <td><a id="dish_{{place}}" href="/restaurant/{{rest_id}}/dish/{{dish_id}}">{{dish}}</a></td>
+                          <td>{{rank}}.</td>
+                          <td>{{#if has_rating}} {{{stars stars}}} {{else}} No Ratings {{/if}}</td>
+                          <td><a id="restaurant_{{rank}}" href="/restaurant/{{r_id}}">{{r_name}}</a></td>
+                          <td><a id="dish_{{rank}}" href="/restaurant/{{r_id}}/dish/{{d_id}}">{{d_name}}</a></td>
+                          <td>{{city}}</td>
                       </tr>
                     {{/each}}
                   </tbody>
                 </table>
+                {{else}}
+                Hm... There seem to be no dishes entered yet in your area! Be the first to add one!
+                {{/if}}
               </div>
             </div>
           </div>
