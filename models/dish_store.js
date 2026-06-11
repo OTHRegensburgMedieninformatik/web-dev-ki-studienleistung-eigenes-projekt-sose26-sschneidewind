@@ -85,6 +85,23 @@ const dish_store = {
             return undefined;
         }
     },
+
+    async get_all_dishes() {
+        const query = "select * from dishes";
+        const values = [];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows;
+            } else {
+                logger.info("Error, there were no dishes!");
+                return undefined;
+            }
+        } catch (e){
+            logger.info("Getting dishes returned an error: "+e);
+            return undefined;
+        }
+    },
 }
 
 module.exports = dish_store;

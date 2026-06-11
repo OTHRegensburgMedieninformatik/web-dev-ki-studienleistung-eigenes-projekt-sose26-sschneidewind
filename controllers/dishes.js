@@ -11,6 +11,16 @@ const dishes = {
         let rest_information = await rest_store.get_restaurant(rest_id);
         let rest_ratings = await rest_store.get_restaurant_ratings(rest_id);
 
+        let keywords = await rest_store.get_keywords(rest_id);
+        logger.info(keywords);
+        let keyword_string = ""
+        if (keywords !== undefined) {
+            keyword_string = keywords[0].keyword;
+            for (var i = 1, size = keywords.length; i<size; i++) {
+                keyword_string += ", " + keywords[i].keyword;
+            }
+        }
+
         //terminate if the specified restaurant or dish does not exist
         if (dish_information === undefined || rest_information === undefined)
             response.redirect("/");
@@ -42,6 +52,8 @@ const dishes = {
             rest_id: rest_id,
             dish_name: dish_information.name,
             rest_name: rest_information.name,
+            keywords: keyword_string,
+            rest_address: rest_information.street + ", " + rest_information.postal_code + " " + rest_information.city,
             dish_image: "/images/dishes"+dish_information.image,
             price: dish_information.price,
             description: dish_information.description,

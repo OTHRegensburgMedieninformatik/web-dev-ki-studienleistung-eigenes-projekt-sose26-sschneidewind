@@ -15,6 +15,16 @@ const restaurant = {
             logger.info("Something went horribly wrong!");
             return response.redirect("/");
         }
+        let keywords = await restaurant_store.get_keywords(rest_id);
+        logger.info(keywords);
+        let keyword_string = ""
+        if (keywords !== undefined) {
+            keyword_string = keywords[0].keyword;
+            for (var i = 1, size = keywords.length; i<size; i++) {
+                keyword_string += ", " + keywords[i].keyword;
+            }
+        }
+
         let dishes =  await restaurant_store.get_dishes(rest_id);
         let ratings = await restaurant_store.get_restaurant_ratings(rest_id);
         const combined = dishes !== undefined ? 
@@ -38,6 +48,8 @@ const restaurant = {
             //restaurant data
             title: "restaurant "+restaurant_data.name,
             restaurant_name: restaurant_data.name,
+            restaurant_address: restaurant_data.street + ", " + restaurant_data.postal_code + " " + restaurant_data.city,
+            restaurant_keywords: keyword_string,
             restaurant_image: "/images/restaurants"+restaurant_data.image,
             restaurant_dishes: combined,
 

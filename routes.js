@@ -38,5 +38,6 @@ router.get("/restaurant/:restaurant_id/dish/:dish_id/user/:user_id/delete_rating
 router.get("/add_restaurant", auth.protected, restaurant.add_restaurant);
 
 router.get("/search", search.index);
+router.post("/search", search.search);
 
 module.exports = router;

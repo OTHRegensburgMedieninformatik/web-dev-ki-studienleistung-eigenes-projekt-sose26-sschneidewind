@@ -11,8 +11,11 @@
         <div class="card mt-3">
             <div class="card-header">
                 <div class="d-flex align-items-center justify-content-between">
-                    <h3>{{restaurant_name}} | {{#if ratings_exist}} {{{stars restaurant_stars}}} {{else}} No ratings yet! {{/if}}</h3>
+                    <h3>{{restaurant_name}} | {{#if ratings_exist}} {{{stars restaurant_stars}}} {{else}} No ratings yet! {{/if}} | {{restaurant_keywords}}</h3>
                     {{#if show_rate_button}}<a class="btn btn-secondary" href="/restaurant/{{restaurant_id}}/rate">Rate this Restaurant</a>{{/if}}
+                </div>
+                <div>
+                    {{restaurant_address}}
                 </div>
             </div>
             <div class="card-body">

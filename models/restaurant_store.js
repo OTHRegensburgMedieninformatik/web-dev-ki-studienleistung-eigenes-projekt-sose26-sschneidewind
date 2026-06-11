@@ -34,6 +34,23 @@ const restaurant_store = {
         }
     },
 
+    async get_keywords(id) {
+        const query = "select * from keywords where r_id=$1";
+        const values = [id];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows;
+            } else {
+                logger.info("There were no keywords for restaurant with id = "+id);
+                return undefined;
+            }
+        } catch(e) {
+            logger.info("oh no, getting the keywords for restaurant "+id+" returned error "+e);
+            return undefined;
+        }
+    },
+
     async get_restaurant_ratings(rest_id) {
         const query1 = "select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=$1";
         const query2 = "select avg(stars) as avg_stars from restaurant_ratings where r_id=$1 group by r_id"
@@ -125,6 +142,23 @@ const restaurant_store = {
             }
         } catch (e){
             logger.info("Getting current best restaurants returned an error: "+e);
+            return undefined;
+        }
+    },
+
+    async get_all_restaurants() {
+        const query = "select id, name, street, postal_code, city from restaurants";
+        const values = [];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows;
+            } else {
+                logger.info("Error, there were no restaurants!");
+                return undefined;
+            }
+        } catch (e){
+            logger.info("Getting restaurants returned an error: "+e);
             return undefined;
         }
     }

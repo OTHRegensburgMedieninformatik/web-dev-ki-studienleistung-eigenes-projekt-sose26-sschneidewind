@@ -2,24 +2,6 @@ const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
 const dish_store = require("../models/dish_store.js");
 
-function get_global_dishes() {
-  //just get globally best performing dishes
-  return [
-    {place: 1, restaurant: "Luigis Pizzeria", rest_id:1, dish: "Pizza Margherita", dish_id : 1},
-    {place: 2, restaurant: "Gumbat Rakete", rest_id:3, dish: "soup soup soup", dish_id : 1},
-    {place: 3, restaurant: "Marios Nudel Restaurant", rest_id:2, dish: "Nudelsuppe rot weiß", dish_id : 1},
-  ]
-}
-
-function get_local_dishes(email) {
-  //here will be another lookup but this time for the best dish of all restaurants near one
-  return [
-    {place: 1, restaurant: "Gumbat Rakete", rest_id:3, dish: "soup soup soup", dish_id : 1},
-    {place: 2, restaurant: "Marios Nudel Restaurant", rest_id:2, dish: "Nudelsuppe rot weiß", dish_id : 1},
-    {place: 3, restaurant: "Luigis Pizzeria", rest_id:1, dish: "Pizza Margherita", dish_id : 1}
-  ]
-}
-
 const index = {
   async index(request, response) {
     request.session.last_url = "/";

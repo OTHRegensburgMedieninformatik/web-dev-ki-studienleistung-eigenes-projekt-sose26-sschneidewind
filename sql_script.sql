@@ -181,3 +181,4 @@ select rank, r_id, d_id, stars, d_name, restaurants.name as r_name, restaurants.
 from result join restaurants on result.r_id = restaurants.id 
 join user_row on (restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city) limit 5;
 
+select  id, name, street, postal_code, city from restaurants;

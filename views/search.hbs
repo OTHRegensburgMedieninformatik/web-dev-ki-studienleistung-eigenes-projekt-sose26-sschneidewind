@@ -8,6 +8,33 @@
 
     <main>
         <div class="container-fluid h-100">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h3>Search for Restaurants or Dishes... or both!</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/search" method="post">
+                        <div class="row">
+                            <div class="col-2">
+                                here will be the radio nodes
+                            </div>
+                            <div class="col-10">
+                                <div class="row justify-content-center align-items-center">
+                                    <div class="col-md-6">
+                                        <div class="search-container">
+                                            <input type="text" name="query" class="form-control search-input" placeholder="Search...">
+                                            <i class="fas fa-search search-icon"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
 </body>

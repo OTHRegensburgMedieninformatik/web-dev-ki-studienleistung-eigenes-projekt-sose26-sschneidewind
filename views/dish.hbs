@@ -12,8 +12,11 @@
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <h3><a href="/restaurant/{{rest_id}}">{{rest_name}}</a> |
-                        {{#if rest_ratings_exist}} {{{stars rest_stars}}} {{/if}}</h3>
+                        {{#if rest_ratings_exist}} {{{stars rest_stars}}} {{/if}} | {{keywords}}</h3>
                         {{#if rest_rateable}}<a href="/restaurant/{{rest_id}}/rate" class="btn btn-secondary">Rate this Restaurant</a>{{/if}}
+                    </div>
+                    <div>
+                        {{rest_address}}
                     </div>
                 </div>
                 <div class="card-body">
