@@ -1,5 +1,6 @@
 const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
+const helper = require("../utils/controller_helper.js");
 
 const restaurant = {
     async index(request, response){
@@ -17,13 +18,8 @@ const restaurant = {
         }
         let keywords = await restaurant_store.get_keywords(rest_id);
         logger.info(keywords);
-        let keyword_string = ""
-        if (keywords !== undefined) {
-            keyword_string = keywords[0].keyword;
-            for (var i = 1, size = keywords.length; i<size; i++) {
-                keyword_string += ", " + keywords[i].keyword;
-            }
-        }
+        let keywords_list = keywords ? keywords.map(row => row.keyword) : [];
+        let keyword_string = helper.extract_keywords(keywords_list);
 
         let dishes =  await restaurant_store.get_dishes(rest_id);
         let ratings = await restaurant_store.get_restaurant_ratings(rest_id);

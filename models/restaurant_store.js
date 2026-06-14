@@ -128,7 +128,7 @@ const restaurant_store = {
     async get_top_restaurants(user_id) {
         const not_logged_in = user_id === undefined;
         const query = not_logged_in? 
-            "select row_number() over (order by avg(stars) desc nulls last) as rank, id, avg(stars) as stars, name, city from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id group by restaurants.id, restaurants.name order by stars desc nulls last limit 3"
+            "select row_number() over (order by avg(stars) desc nulls last) as rank, id, avg(stars) as stars, name, city from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id group by restaurants.id, restaurants.name order by stars desc nulls last limit 5"
             :
             "with user_row as (select * from users where id=$1) select row_number() over (order by avg(stars) desc nulls last) as rank, restaurants.id, avg(stars) as stars, restaurants.name, restaurants.city from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id join user_row on restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city group by restaurants.id, restaurants.name order by stars desc nulls last limit 5";
         const values = not_logged_in ? [] : [user_id]
