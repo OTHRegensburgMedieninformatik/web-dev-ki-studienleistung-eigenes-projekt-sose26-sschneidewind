@@ -17,7 +17,6 @@ const restaurant = {
             return response.redirect("/");
         }
         let keywords = await restaurant_store.get_keywords(rest_id);
-        logger.info(keywords);
         let keywords_list = keywords ? keywords.map(row => row.keyword) : [];
         let keyword_string = helper.extract_keywords(keywords_list);
 
@@ -31,13 +30,11 @@ const restaurant = {
                         : false
                 })
             ) : [];
-        logger.info(combined);
         
         //logic helper for the viewData
         let already_rated = false;
         if (request.session.rated_restaurants !== undefined)
             already_rated = request.session.rated_restaurants.includes(parseInt(rest_id));
-        logger.info(request.session.rated_dishes);
         const ratings_exist = ratings !== undefined;
 
         const viewData = {
@@ -132,7 +129,7 @@ const restaurant = {
             viewData.error_msg = "Error: This restaurant already exists!";
             return response.render("add_restaurant", viewData)
         }
-        
+
         const rest_response = await restaurant_store.add_restaurant(restaurant);        
         if (rest_response[0] == 1) { //inserting restaurant returned error
             viewData.error = true;            

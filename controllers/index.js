@@ -11,8 +11,6 @@ const index = {
     restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
     dishes = dishes ? dishes.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
 
-    logger.info(dishes);
-
     const viewData = {
       title: "Critical Restaurant",
       signed_in: request.session.signed_in,

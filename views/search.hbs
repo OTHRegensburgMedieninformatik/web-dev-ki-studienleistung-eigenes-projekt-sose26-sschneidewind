@@ -16,7 +16,53 @@
                     <form action="/search" method="post">
                         <div class="row">
                             <div class="col-2">
-                                here will be the radio nodes
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <h5>Search for:</h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="checkbox" id="restaurants_box" name="restaurant_box" value="true" {{#if rest_box_checked}}checked{{/if}}>
+                                            <label for="restaurant_box">Restaurants</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="checkbox" id="dishes_box" name="dish_box" value="true" {{#if dish_box_checked}}checked{{/if}}>
+                                            <label for="dishes_box">Dishes</label>
+                                        </div>
+                                        <div class="mt-5 mb-3">
+                                            <h5>Restaurants with at least</h5>
+                                        </div>                     
+                                        {{#each rest_star_options}}
+                                            <div class="mb-3">
+                                                <input type="radio" id="rest_{{number}}_stars" name="rest_stars" value="{{number}}" {{#if checked}}checked{{/if}}>
+                                                <label for="rest_{{number}}_stars">{{{stars number}}}</label>
+                                            </div>
+                                        {{/each}}
+                                        <div class="mb-3">
+                                            <h5>Stars</h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="radio" id="rest_-1_stars" name="rest_stars" value="-1" {{#if rest_checked_irr}}checked{{/if}}>
+                                            <label for="rest_-1_stars">Stars don't matter<label>
+                                        </div>
+                                        <div class="mt-5 mb-3">
+                                            <h5>Dishes with at least</h5>
+                                        </div>
+                                        {{#each dish_star_options}}
+                                            <div class="mb-3">
+                                                <input type="radio" id="dish_{{number}}_stars" name="dish_stars" value="{{number}}" {{#if checked}}checked{{/if}}>
+                                                <label for="dish_{{number}}_stars">{{{stars number}}}</label>
+                                            </div>
+                                        {{/each}}
+                                        <div class="mb-3">
+                                            <h5>Stars</h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="radio" id="dish_-1_stars" name="dish_stars" value="-1" {{#if dish_checked_irr}}checked{{/if}}>
+                                            <label for="dish_-1_stars">Stars don't matter<label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-10">
                                 <div class="row justify-content-center align-items-center">
@@ -30,37 +76,83 @@
                                         <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
                                     </div>
                                 </div>
-                                {{#if searched}}
-                                    {{#if restaurants}}
-                                    <div class="row justify-content-center mt-4">
-                                        <h4>Restaurants:</h4>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Address</th>
-                                                <th>Keywords</th>
-                                                <th>Rating</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#each restaurants}}
-                                            <tr>
-                                                <td><a href="/restaurant/{{id}}">{{name}}</a></td>
-                                                <td>{{street}}, {{postal_code}} {{city}}</td>
-                                                <td>{{#if keywords}} {{keywords}} {{else}} No Keywords! {{/if}}</td>
-                                                <td>{{#if rating}} {{{stars rating}}} {{else}} No Ratings yet! {{/if}}</td>
-                                            </tr>
-                                            {{/each}}
-                                        </tbody>
-                                    </table>
-                                    {{else}}
-                                    <div class="row justify-content-center mt-4">
-                                        <div class="col-auto">
-                                            <h4>No Restaurants were found! Maybe try another query.</h4>
-                                        </div>
-                                    </div>
+                                {{#if no_results_allowed}}
+                                <div class="row justify-content-center mt-4">
+                                    <h3>You need to check at least ONE of restaurants or dishes to get results!</h3>
+                                    <h4><i class="bi bi-arrow-left"></i> There on the left!</h4>
+                                </div>
+                                {{else}}
+                                    {{#if searched}}
+                                        {{#if rest_box_checked}}
+                                            {{#if restaurants}}
+                                            <div class="row justify-content-center mt-4">
+                                                <h4>Restaurants:</h4>
+                                            </div>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Address</th>
+                                                        <th>Keywords</th>
+                                                        <th>Rating</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each restaurants}}
+                                                    <tr>
+                                                        <td><a href="/restaurant/{{id}}">{{name}}</a></td>
+                                                        <td>{{street}}, {{postal_code}} {{city}}</td>
+                                                        <td>{{#if keywords}} {{keywords}} {{else}} No Keywords! {{/if}}</td>
+                                                        <td>{{#if rating}} {{{stars rating}}} {{else}} No Ratings yet! {{/if}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                            {{else}}
+                                            <div class="row justify-content-center mt-4">
+                                                <div class="col-auto">
+                                                    <h4>No Restaurants were found! Maybe try another query.</h4>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+                                        {{/if}}
+                                        {{#if dish_box_checked}}
+                                            {{#if dishes}}
+                                            <div class="row justify-content-center mt-4">
+                                                <h4>Dishes:</h4>
+                                            </div>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Restaurant Name</th>
+                                                        <th>Address</th>
+                                                        <th>Dish</th>
+                                                        <th>Description</th>
+                                                        <th>Price</th>
+                                                        <th>Rating</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each dishes}}
+                                                    <tr>
+                                                        <td><a href="/restaurant/{{r_id}}">{{rest_name}}</a></td>
+                                                        <td>{{street}}, {{postal_code}} {{city}}</td>
+                                                        <td><a href="/restaurant/{{r_id}}/dish/{{d_id}}">{{name}}</a></td>
+                                                        <td>{{description}}</td>
+                                                        <td>{{price}} €</td>
+                                                        <td>{{#if rating}} {{{stars rating}}} {{else}} No Ratings yet! {{/if}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                            {{else}}
+                                            <div class="row justify-content-center mt-4">
+                                                <div class="col-auto">
+                                                    <h4>No Dishes were found! Maybe try another query.</h4>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+                                        {{/if}}
                                     {{/if}}
                                 {{/if}}
                             </div>
