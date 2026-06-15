@@ -84,7 +84,7 @@
               </div>
             </div>
             <div class="col-7">
-              <img src = "/images/regensburg_map.png">
+              <div id="map"></div>
             </div>
           </div>
         </div>
@@ -92,6 +92,14 @@
     </div>
   </main>
   
+  <script>
+    var map = L.map('map').setView([{{center_coords.[1]}}, {{center_coords.[0]}}], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+  </script>
+
   {{>footer}}
 
 </body>

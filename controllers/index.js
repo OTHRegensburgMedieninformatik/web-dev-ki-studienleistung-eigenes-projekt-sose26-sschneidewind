@@ -10,7 +10,15 @@ const index = {
     let dishes = await dish_store.get_top_dishes(request.session.user_id); // same as above
     restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
     dishes = dishes ? dishes.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
-
+    const resp = await fetch("https://nominatim.openstreetmap.org/search?format=geocodejson&street=Friedenstraße.17&city=Regensburg");
+    const data = await resp.json();
+    let base_coords = data.features[0].geometry.coordinates;
+    if (request.session.coords !== undefined) {
+      base_coords = request.session.coords
+    } else if (request.session.logged_in) {
+      base_coords = await user_store.generate_coords(request.session.user_id);
+    }
+    logger.info(base_coords);
     const viewData = {
       title: "Critical Restaurant",
       signed_in: request.session.signed_in,
@@ -19,7 +27,8 @@ const index = {
       restaurants_exist: restaurants !== undefined,
       restaurants: restaurants,
       dishes_exist: dishes !== undefined,
-      dishes: dishes
+      dishes: dishes,
+      center_coords: base_coords,
     };
     response.render("index", viewData);
   },

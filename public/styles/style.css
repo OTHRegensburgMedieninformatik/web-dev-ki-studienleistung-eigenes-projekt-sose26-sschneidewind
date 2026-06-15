@@ -99,3 +99,8 @@ main {
     transform: translateY(-50%);
     color: #888;
 }
+
+#map {
+    height: 100%;
+    width: 100%;
+}

@@ -56,7 +56,18 @@ insert into keywords (r_id, keyword) values
 	(2, 'Drinks'),
 	(3, 'Soup'),
 	(3, 'Drinks'),
-	(3, 'Asian');
+	(3, 'Asian'),
+	(4, 'Pizza'),
+	(4, 'Salads'),
+	(4, 'Lasagna'),
+	(4, 'Drinks'),
+	(5, 'Pizza'),
+	(5, 'Lasagna'),
+	(5, 'Cocktails'),
+	(6, 'Gnocchi'),
+	(6, 'Lasagna'),
+	(6, 'Drinks'),
+	(6, 'Bruschetta');
 
 create table dishes(
 	r_id int references restaurants(id),
@@ -163,6 +174,8 @@ select * from restaurant_ratings where r_id=1
 select * from users;
 
 select * from restaurants;
+
+select * from keywords;
 
 select * from restaurant_ratings join users on restaurant_ratings.u_id = users.id where r_id=1;
 
