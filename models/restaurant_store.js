@@ -6,8 +6,9 @@ const logger = require("../utils/logger.js");
 
 const restaurant_store = {
     async add_restaurant(restaurant) {
-        const query = "insert into restaurants(name, street, postal_code, city, country) values ($1, $2, $3, $3, $5)";
-        const values = [restaurant.name, restaurant.street, restaurant.postal_code, restaurant.city, restaurant.country];
+        logger.info(restaurant);
+        const query = "insert into restaurants(name, street, postal_code, city, country, image) values ($1, $2, $3, $4, $5, $6)";
+        const values = [restaurant.rest_name, restaurant.street, restaurant.postal_code, restaurant.city, restaurant.country, restaurant.image ? restaurant.image : "/no_image.png"];
         try {
             await dataStoreClient.query(query, values);
             return [0,0];
@@ -47,6 +48,39 @@ const restaurant_store = {
             }
         } catch(e) {
             logger.info("oh no, getting the keywords for restaurant "+id+" returned error "+e);
+            return undefined;
+        }
+    },
+
+    async add_keywords(keyword_list, rest_id) {
+        const query = "insert into keywords(r_id, keyword) values ($1, $2)";
+        logger.info(keyword_list);
+        for (let i = 0; i<keyword_list.length; ++i) {
+            values = [rest_id, keyword_list[i]];
+            logger.info(values);
+            try {
+                let response = await dataStoreClient.query(query, values);
+            } catch (e) {
+                logger.info("Inserting keyword "+keyword_list[i]+" returned "+e);
+                return [1,e];
+            }
+        }
+        return [0,0];
+    },
+
+    async get_restaurant_id(restaurant) {
+        const query = "select id from restaurants where name = $1 and street = $2 and postal_code = $3";
+        const values = [restaurant.rest_name, restaurant.street, restaurant.postal_code];
+        try {
+            let response = await dataStoreClient.query(query, values);
+            if (response.rows[0] !== undefined) {
+                return response.rows[0].id;
+            } else {
+                logger.info("Getting rest_id for restaurant "+restaurant.rest_name+" was not successfull!");
+                return undefined;
+            } 
+        } catch(e) {
+            logger.info("Getting rest_id for restaurant "+restaurant.rest_name+" returned error: " + e);
             return undefined;
         }
     },

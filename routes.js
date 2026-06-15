@@ -35,7 +35,8 @@ router.get("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dish
 router.post("/restaurant/:restaurant_id/dish/:dish_id/rate", auth.protected, dishes.add_rating);
 router.get("/restaurant/:restaurant_id/dish/:dish_id/user/:user_id/delete_rating", auth.protected, dishes.delete_rating);
 
-router.get("/add_restaurant", auth.protected, restaurant.add_restaurant);
+router.get("/add_restaurant", auth.protected, restaurant.show_add_restaurant);
+router.post("/add_restaurant", auth.protected, restaurant.add_restaurant);
 
 router.get("/search", search.index);
 router.post("/search", search.search);

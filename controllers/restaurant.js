@@ -98,8 +98,64 @@ const restaurant = {
         response.redirect(base_url);    
     },
 
-    async add_restaurant(request, response) {
+    async show_add_restaurant(request, response) {
+        const viewData = {
+            signed_in: request.session.signed_in,
+            name: request.session.name,
+            surname: request.session.surname
+        };
+        response.render("add_restaurant", viewData)
+    },
 
+    async add_restaurant(request, response) {
+        const restaurant = request.body;
+        const keywords = String(request.body.keywords).split(",").map(s => s.trim());
+        let viewData = {
+            rest_name : restaurant.rest_name,
+            street : restaurant.street,
+            postal_code: restaurant.postal_code,
+            city : restaurant.city,
+            country : restaurant.country,
+            keywords : request.body.keywords,
+
+            signed_in: request.session.signed_in,
+            name: request.session.name,
+            surname: request.session.surname
+        };
+        logger.info(keywords);
+        if (keywords.length < 3) { //not enough keywords provided
+            viewData.error = true;
+            viewData.error_msg = "Error: Please insert at least 3 Keywords!";        
+            return response.render("add_restaurant", viewData)
+        } else if (await restaurant_store.get_restaurant_id(restaurant) !== undefined){ //this restaurant already exists!
+            viewData.error = true;
+            viewData.error_msg = "Error: This restaurant already exists!";
+            return response.render("add_restaurant", viewData)
+        }
+        
+        const rest_response = await restaurant_store.add_restaurant(restaurant);        
+        if (rest_response[0] == 1) { //inserting restaurant returned error
+            viewData.error = true;            
+            viewData.error_msg = "Error: Restaurant could not be inserted! Check that all fields are filled out.";
+            return response.render("add_restaurant", viewData)
+        } else { //correctly inserted
+            let rest_id = await restaurant_store.get_restaurant_id(restaurant);
+            if (rest_id === undefined) { //error getting the rest_id
+                viewData.error = true;
+                viewData.error_msg = "There was an Error getting the ID!";
+                return response.render("add_restaurant", viewData);
+            } else {
+                const key_response = await restaurant_store.add_keywords(keywords, rest_id);
+                if (key_response[0] == 0) { //correctly inserted restaurants and keywords, redirect to restaurant site
+                    let base_url = "/restaurant/" + rest_id;
+                    response.redirect(base_url);
+                } else {
+                    viewData.error = true;
+                    viewData.error_msg = "There was an Error inserting the keys!";
+                    return response.render("add_restaurant", viewData);
+                }
+            }
+        }
     },
 
     async delete_rating(request, response) {

@@ -1,0 +1,52 @@
+<body>
+
+    {{> menu id='add_restaurant' name=name surname=surname}}
+
+    <main>
+        <div class="container-fluid">
+            <div class="row d-flex flex-column align-items-center justify-content-center">
+                <div class="col-10 ">
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h2>Add A Restaurant! </h2>
+                        </div>
+                        <div class="card-body">
+                            <form action="/add_restaurant" method="POST">
+                                <div class="mb-3">
+                                    <label for="rest_name" class="form-label">Restaurant Name</label>
+                                    <input type="text" class="form-control" id="rest_name" name="rest_name" value="{{rest_name}}">
+                                </div> 
+                                <div class="mb-3">
+                                    <label for="street" class="form-label">Address (Street and Number)</label>
+                                    <input type="text" class="form-control" id="street" name="street" value="{{street}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="postal_code" class="form-label">Postal Code</label>
+                                    <input type="number" class="form-control" id="postal_code" name="postal_code" value="{{postal_code}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" name="city" value="{{city}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="country" class="form-label">Country</label>
+                                    <input type="text" class="form-control" id="country" name="country" value="{{country}}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="keywords" class="form-label">Keywords (please input at least 3 keywords that fit the restaurant).</label>
+                                    <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Asian, Italian, Greek, Pizza, Pasta, Curry, Drinks, Cocktails..." value="{{keywords}}">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Add Restaurant</button>
+                                    {{#if error}} {{error_msg}} {{/if}}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    {{>footer}}
+</body>
