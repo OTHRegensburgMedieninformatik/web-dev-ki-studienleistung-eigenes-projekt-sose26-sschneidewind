@@ -114,6 +114,26 @@ const user_store = {
             logger.info("Error: couldn't get restaurant ratings for user "+user_id+": "+e);
             return undefined;
         }
+    },
+
+    async add_and_get_coords(user) {
+        try {
+            const url = "https://nominatim.openstreetmap.org/search?format=geocodejson&street="+user.street.replaceAll(" ", ".")+"&city="+user.city
+            logger.info(url);
+            const resp = await fetch(url);
+            logger.info(resp);
+            const data = await resp.json();
+            logger.info(data);
+            const lat = data.features[0].geometry.coordinates[1];
+            const long = data.features[0].geometry.coordinates[0];
+            const query = "UPDATE users SET lat = $2, long = $3 WHERE id = $1";
+            const values = [user.id, lat, long];
+            let response = await dataStoreClient.query(query, values);
+            return [lat, long];
+        } catch(e) {
+            logger.info("Error: getting the coordinates returned an error!"+e)
+            return undefined;
+        }
     }
 };
 

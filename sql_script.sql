@@ -14,15 +14,17 @@ create table users(
 	postal_code int not null,
 	city text not null,
 	country text not null,
-	password text not null
+	password text not null,
+	lat decimal(10,7),
+	long decimal(10,7)
 );
 
 insert into users(email, name, surname, street, postal_code, city, country, password) values
-	('max_mustermann@gmail.com', 'Max', 'Mustermann', 'Schubertstraße 24', 93053, 'Regensburg', 'Deutschland', '999'),
-	('moritz_mustermann@gmail.com', 'Moritz', 'Mustermann', 'Schubertstraße 25', 93053, 'Regensburg', 'Deutschland', '123456789'),
-	('mina_mustermann@gmail.com', 'Mina', 'Mustermann', 'Schubertstraße 30', 93053, 'Regensburg', 'Deutschland', '147258369'),
-	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '123'),
-	('test@g.de', 'Tester', 'McTestFace', 'Galgenbergstraße 32', 99326, 'Kleinhettstedt', 'Deutschland', '1');
+	('max_mustermann@gmail.com', 'Max', 'Mustermann', 'Schubertstraße 24', 93053, 'Regensburg', 'Germany', '999'),
+	('moritz_mustermann@gmail.com', 'Moritz', 'Mustermann', 'Schubertstraße 25', 93053, 'Regensburg', 'Germany', '123456789'),
+	('mina_mustermann@gmail.com', 'Mina', 'Mustermann', 'Schubertstraße 30', 93053, 'Regensburg', 'Germany', '147258369'),
+	('info@mini_napoli.de', 'Mini', 'Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Germany', '123'),
+	('test@g.de', 'Tester', 'McTestFace', 'Holzheimer Straße 2', 93183, 'Kallmünz', 'Germany', '1');
 
 create table restaurants(
 	id serial primary key,
@@ -31,16 +33,18 @@ create table restaurants(
 	postal_code int not null,
 	city text not null,
 	country text not null,
-	image text
+	image text,
+	lat decimal(10,7),
+	long decimal(10,7)
 );
 
 insert into restaurants(name, street, postal_code, city, country, image) values
 	('Luigis Pizzeria', 'Ägidienplatz 1', 93047, 'Regensburg', 'Germany', '/1.png'),
-	('Marios Nudel Restaurant', 'Friedrich-Ebert-Straße 15', 93051, 'Regensburg', 'Deutschland', '/2.png'),
-	('The not-leaky Cauldron', 'Burgunderstraße 25', 93053, 'Regensburg', 'Deutschland', '/no_image.png'),
-	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Deutschland', '/no_image.png'),
-	('Waluigis Pizzeria', 'Teststraße 3', 99326, 'Stadtilm', 'Deutschland', '/no_image.png'),
-	('Warios Italian Cuisine', 'Teststraße 4', 99326, 'Kleinhettstedt', 'Deutschland', '/no_image.png');
+	('Marios Nudel Restaurant', 'Friedrich-Ebert-Straße 15', 93051, 'Regensburg', 'Germany', '/2.png'),
+	('The not-leaky Cauldron', 'Burgunderstraße 25', 93053, 'Regensburg', 'Germany', '/no_image.png'),
+	('Mini Napoli', 'Fikentscherstraße 2', 93051, 'Regensburg', 'Germany', '/no_image.png'),
+	('Waluigis Pizzeria', 'Mulzgasse 5', 93183, 'Kallmünz', 'Germany', '/no_image.png'),
+	('Warios Italian Cuisine', 'Ecksteingäßchen 9', 93183, 'Kallmünz', 'Germany', '/no_image.png');
 
 create table keywords(
 	r_id int references restaurants(id),

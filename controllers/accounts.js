@@ -2,6 +2,13 @@ const user_store = require("../models/user_store");
 const logger = require("../utils/logger")
 
 async function extract_user_info(request, user) { //
+    let coords;
+    if ((user.lat === null) || (user.long === null)) {
+        coords = await user_store.add_and_get_coords(user);
+    } else {
+        coords = [user.lat, user.long];
+    }
+
     request.session.user_id = user.id;
     request.session.signed_in = true;
     request.session.name = user.name;
@@ -11,6 +18,8 @@ async function extract_user_info(request, user) { //
     request.session.postal_code = user.postal_code;
     request.session.city = user.city;
     request.session.country = user.country;
+    request.session.lat = coords[0] !== undefined ? coords[0] : undefined;
+    request.session.long = coords[1] !== undefined ? coords[1] : undefined;
     let restaurant_response = await user_store.get_already_rated_restaurants(user.id);
     let dish_response = await user_store.get_already_rated_dishes_restaurants(user.id);
     request.session.rated_restaurants = restaurant_response !== undefined ? restaurant_response : [];
@@ -37,6 +46,9 @@ const accounts = {
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) { //if user was correctly added returns to the last url or the home if the site was directly accessed over the login page
             user = await user_store.authenticate(request.body.email, request.body.password); //redefine user to the user logged in with the current credentials (just getting the new values, p.ex. user_id since this is defined by the database and cannot be determined without another query)
+
+            //now insert the coordinates
+
             await extract_user_info(request, user);
             if (request.session !== undefined && request.session.last_url !== undefined)
                 response.redirect(request.session.last_url);

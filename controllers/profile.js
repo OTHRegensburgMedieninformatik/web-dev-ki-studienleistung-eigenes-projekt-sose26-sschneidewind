@@ -15,7 +15,8 @@ function make_view_data(title, request) {
   };
 }
 
-function update_data(request, user) {
+async function update_data(request, user) {
+  coords = await user_store.add_and_get_coords(user);
   request.session.name = user.name;
   request.session.surname = user.surname;
   request.session.email = user.newEmail === '' ? user.email : user.newEmail;
@@ -23,6 +24,8 @@ function update_data(request, user) {
   request.session.postal_code = user.postal_code;
   request.session.city = user.city;
   request.session.country = user.country;
+  request.session.lat = coords ? coords[0] : undefined;
+  request.session.long = coords ? coords[1] : undefined;
 }
 
 const profile = {
@@ -62,7 +65,7 @@ const profile = {
         viewData.error_msg = change_response[1];
         response.render("profile_settings", viewData);
       } else {
-        update_data(request, user);
+        await update_data(request, user);
         let viewData = make_view_data("Settings", request);
         response.render("profile_settings", viewData);
       }
