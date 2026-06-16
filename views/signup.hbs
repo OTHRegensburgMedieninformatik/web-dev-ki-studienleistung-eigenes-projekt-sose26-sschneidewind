@@ -3,7 +3,7 @@
     {{> welcomemenu id='signup' }}
 
     <main>
-        <div class="container mx-auto">
+        <div class="container">
             <div class="card mt-3">
                 <div class="card-header"><h3>Sign up!</h3></div>
                 <div class="card-body">
@@ -41,7 +41,7 @@
                             <input type="password" class="form-control" id="inputPassword" name="password">
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn">Register</button>
                             {{#if error}} {{error_msg}} {{/if}}
                         </div>
                     </form>

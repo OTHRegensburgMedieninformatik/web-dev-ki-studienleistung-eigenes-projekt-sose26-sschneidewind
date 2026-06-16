@@ -6,6 +6,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    font-family: "IBM Plex Serif", serif;
 }
 
 main {
@@ -103,4 +104,53 @@ main {
 #map {
     height: 100%;
     width: 100%;
+}
+
+a {
+    color: #00613f
+}
+
+a:hover {
+    color: #5bb093
+}
+
+.nav-item .nav-link {
+    color: #00613f;
+}
+
+.nav-item .nav-link.active {
+    background-color: #00613f;
+    color: #ffffff
+}
+
+.btn {
+    background-color: #00613f;
+    color: #ffffff
+}
+
+.btn:hover {
+    background-color: #004a30;
+    color: #ffffff
+}
+
+.bi-house-fill {
+    color: #00613f
+}
+
+.navbar {
+    font-weight: 600;
+    font-size: large;
+    background-color: #c8e3d9;
+}
+
+.card-header {
+    background-color: #c8e3d9;
+}
+
+.card-body {
+    background-color: #ebfff8;
+}
+
+.footer {
+    background-color: #c8e3d9;
 }

@@ -26,25 +26,22 @@
                     <div class="col-9 d-flex flex-column align-items-center justify-content-center">
                         {{#if adding_dish}}
                             <form action="{{add_link}}" method="Post" class="w-100">
-                                <table class="table table-bordered w-100">
-                                    <tbody>
-                                        <tr>
-                                            <td width="200px">
-                                                maybe uploading an image
-                                            </td>
-                                            <td>
-                                                <div class="dish_details">
-                                                    <label for="input_name" class="form_label">Name of the Dish</label>
-                                                    <input type="text" class="form-control" id="input_name" name="name">
-                                                    <label for="input_price" class="form_label">Price (in €)</label>
-                                                    <input type="float" class="form-control" id="input_price" name="price">
-                                                    <label for="input_description" class="form_label">Description (optional)</label>
-                                                    <input type="text" class="form-control" id="input_description" name ="description">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>    
-                                </table>
+                                <div class="card mb-3">
+                                    <div class="card-body ">
+                                        <div class="mb-3">
+                                            <label for="input_name" class="form_label">Name of the Dish</label>
+                                            <input type="text" class="form-control" id="input_name" name="name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="input_price" class="form_label">Price (in €)</label>
+                                            <input type="float" class="form-control" id="input_price" name="price">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="input_description" class="form_label">Description (optional)</label>
+                                            <input type="text" class="form-control" id="input_description" name ="description">
+                                        </div>
+                                    </div>
+                                </div>   
                                 <div class="mb-5 d-flex align-items-center justify-content-center">
                                     <button type="submit" class="btn btn-secondary">Submit</button>
                                 </div>

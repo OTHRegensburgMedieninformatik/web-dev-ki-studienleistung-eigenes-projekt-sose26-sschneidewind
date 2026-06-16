@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="card mt-3">
                 <div class="card-header">
-                    <h2>Profile of {{name}} {{surname}}</h2>
+                    <h3>Profile of {{name}} {{surname}}</h3>
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
@@ -15,8 +15,8 @@
                                 <thead>
                                     <tr>
                                         <th>Restaurant</th>
-                                        <th>Sterne</th>
-                                        <th>Fließtext</th>
+                                        <th>Stars</th>
+                                        <th>Description</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -26,7 +26,7 @@
                                         <td><a id="restaurant_{{place}}" href="/restaurant/{{rest_id}}">{{restaurant}}</a></td>
                                         <td>{{{stars stars}}}</td>
                                         <td>{{string}}</td>
-                                        <td><a class="button btn-secondary" href="/restaurant/{{rest_id}}/user/{{../user_id}}/delete_rating">
+                                        <td><a class="btn btn-sm" href="/restaurant/{{rest_id}}/user/{{../user_id}}/delete_rating">
                                             <i class="bi bi-trash"></i>
                                         </a></td>
                                     </tr>
@@ -41,8 +41,8 @@
                                     <tr>
                                         <th>Restaurant</th>
                                         <th>Dish</th>
-                                        <th>Sterne</th>
-                                        <th>Fließtext</th>
+                                        <th>Stars</th>
+                                        <th>Description</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -53,7 +53,7 @@
                                         <td><a id="dish_{{place}}" href="/restaurant/{{rest_id}}/dish/{{dish_id}}">{{dish}}</a></td>
                                         <td style="white-space: nowrap;">{{{stars stars}}}</td>
                                         <td>{{string}}</td>
-                                        <td><a class="button btn-secondary" href="/restaurant/{{rest_id}}/dish/{{dish_id}}/user/{{../user_id}}/delete_rating">
+                                        <td><a class="btn btn-sm" href="/restaurant/{{rest_id}}/dish/{{dish_id}}/user/{{../user_id}}/delete_rating">
                                             <i class="bi bi-trash"></i>
                                         </a></td>
                                     </tr>
