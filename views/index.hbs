@@ -98,7 +98,6 @@
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
       iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34]
     });
-    console.log({{center_coords}})
     var home_coords = [{{center_coords.[1]}}, {{center_coords.[0]}}]
     var map = L.map('map').setView(home_coords, 13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -108,7 +107,15 @@
     const signed_in = {{#if signed_in}}true{{else}}false{{/if}}
     if (signed_in) {
       var home_marker = L.marker(home_coords, {icon: redIcon}).addTo(map);
-      home_marker.bindPopup("<b>You live Here!</b><br>");
+      home_marker.bindPopup("<b>You live here!</b><br>");
+    }
+
+    const restaurants = {{{all_restaurants}}};
+    let rest_marker_arr = [];
+    for (var i = 0; i<restaurants.length; ++i) {
+      console.log(restaurants[i])
+      rest_marker_arr.push(L.marker([parseFloat(restaurants[i].lat), parseFloat(restaurants[i].long)]).addTo(map));
+      rest_marker_arr[i].bindPopup("<a href='/restaurant/"+restaurants[i].id+"'>"+restaurants[i].name+"</a>")
     }
   </script>
 

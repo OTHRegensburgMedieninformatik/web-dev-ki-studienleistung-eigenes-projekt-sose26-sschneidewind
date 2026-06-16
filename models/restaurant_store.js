@@ -162,9 +162,9 @@ const restaurant_store = {
     async get_top_restaurants(user_id) {
         const not_logged_in = user_id === undefined;
         const query = not_logged_in? 
-            "select row_number() over (order by avg(stars) desc nulls last) as rank, id, avg(stars) as stars, name, city from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id group by restaurants.id, restaurants.name order by stars desc nulls last limit 5"
+            "select row_number() over (order by avg(stars) desc nulls last) as rank, id, avg(stars) as stars, name, street, city, lat, long from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id group by restaurants.id, restaurants.name order by stars desc nulls last limit 5"
             :
-            "with user_row as (select * from users where id=$1) select row_number() over (order by avg(stars) desc nulls last) as rank, restaurants.id, avg(stars) as stars, restaurants.name, restaurants.city from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id join user_row on restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city group by restaurants.id, restaurants.name order by stars desc nulls last limit 5";
+            "with user_row as (select * from users where id=$1) select row_number() over (order by avg(stars) desc nulls last) as rank, restaurants.id, avg(stars) as stars, restaurants.name, restaurants.city, restaurants.street, restaurants.lat, restaurants.long from restaurant_ratings right join restaurants on restaurant_ratings.r_id = restaurants.id join user_row on restaurants.postal_code = user_row.postal_code or restaurants.city = user_row.city group by restaurants.id, restaurants.name order by stars desc nulls last limit 5";
         const values = not_logged_in ? [] : [user_id]
         try {
             let response = await dataStoreClient.query(query, values);
@@ -181,7 +181,7 @@ const restaurant_store = {
     },
 
     async get_all_restaurants() {
-        const query = "select id, name, street, postal_code, city from restaurants";
+        const query = "select id, name, street, postal_code, city, lat, long from restaurants";
         const values = [];
         try {
             let response = await dataStoreClient.query(query, values);
@@ -193,6 +193,24 @@ const restaurant_store = {
             }
         } catch (e){
             logger.info("Getting restaurants returned an error: "+e);
+            return undefined;
+        }
+    },
+
+    async add_and_get_coords(restaurant) {
+        try {
+            const url = "https://nominatim.openstreetmap.org/search?format=geocodejson&street="+restaurant.street.replaceAll(" ", ".")+"&city="+restaurant.city
+            logger.info(url);
+            const resp = await fetch(url);
+            const data = await resp.json();
+            const lat = data.features[0].geometry.coordinates[1];
+            const long = data.features[0].geometry.coordinates[0];
+            const query = "UPDATE restaurants SET lat = $2, long = $3 WHERE id = $1";
+            const values = [restaurant.id, lat, long];
+            let response = await dataStoreClient.query(query, values);
+            return [lat, long];
+        } catch(e) {
+            logger.info("Error: getting the coordinates returned an error!"+e)
             return undefined;
         }
     }

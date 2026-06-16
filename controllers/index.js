@@ -19,6 +19,14 @@ const index = {
       base_coords = [request.session.long, request.session.lat];
     }
 
+    let all_restaurants = await restaurant_store.get_all_restaurants();
+    for (var i = 0; i<all_restaurants.length; ++i) {
+      if ((all_restaurants[i].lat === null) || (all_restaurants[i].long === null)) {
+        const coords = await restaurant_store.add_and_get_coords(all_restaurants[i]);
+        all_restaurants[i] = {...all_restaurants[i], lat : coords ? coords[0] : undefined, long : coords ? coords[1] : undefined};
+      }
+    }
+
     const viewData = {
       title: "Critical Restaurant",
       signed_in: request.session.signed_in,
@@ -26,6 +34,7 @@ const index = {
       surname: request.session.surname,
       restaurants_exist: restaurants !== undefined,
       restaurants: restaurants,
+      all_restaurants: JSON.stringify(all_restaurants),
       dishes_exist: dishes !== undefined,
       dishes: dishes,
       center_coords: base_coords,
