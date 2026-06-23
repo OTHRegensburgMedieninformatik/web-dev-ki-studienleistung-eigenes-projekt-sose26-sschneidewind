@@ -1,7 +1,1 @@
-add coordinates to restaurants:
-    adjust code for database
-    add handling if restaurant has yet no coordinates
-    return coordinates for all restaurants into home
-goal: let map display all markers for all restaurants
-
-leaflet map + coordinate api
+Add error handling if a field is NULLs

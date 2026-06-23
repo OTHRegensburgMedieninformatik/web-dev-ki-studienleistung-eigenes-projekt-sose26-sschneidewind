@@ -130,28 +130,14 @@ const restaurant = {
             return response.render("add_restaurant", viewData)
         }
 
-        const rest_response = await restaurant_store.add_restaurant(restaurant);        
+        const rest_response = await restaurant_store.add_restaurant(restaurant, keywords);        
         if (rest_response[0] == 1) { //inserting restaurant returned error
             viewData.error = true;            
-            viewData.error_msg = "Error: Restaurant could not be inserted! Check that all fields are filled out.";
+            viewData.error_msg = rest_response[1];
             return response.render("add_restaurant", viewData)
-        } else { //correctly inserted
-            let rest_id = await restaurant_store.get_restaurant_id(restaurant);
-            if (rest_id === undefined) { //error getting the rest_id
-                viewData.error = true;
-                viewData.error_msg = "There was an Error getting the ID!";
-                return response.render("add_restaurant", viewData);
-            } else {
-                const key_response = await restaurant_store.add_keywords(keywords, rest_id);
-                if (key_response[0] == 0) { //correctly inserted restaurants and keywords, redirect to restaurant site
-                    let base_url = "/restaurant/" + rest_id;
-                    response.redirect(base_url);
-                } else {
-                    viewData.error = true;
-                    viewData.error_msg = "There was an Error inserting the keys!";
-                    return response.render("add_restaurant", viewData);
-                }
-            }
+        } else { //correctly inserted, special case: returns restaurant id in the second rest_response element
+            let base_url = "/restaurant/" + rest_response[1];
+            response.redirect(base_url);
         }
     },
 

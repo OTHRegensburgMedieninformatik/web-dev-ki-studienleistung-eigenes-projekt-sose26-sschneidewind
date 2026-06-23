@@ -5,14 +5,28 @@ const logger = require("../utils/logger.js");
 //getter return undefined or the object, writer / adder return an array with first element 0 if fine and 1 if error and second element the error message
 
 const restaurant_store = {
-    async add_restaurant(restaurant) {
+    async add_restaurant(restaurant, keywords) {
         logger.info(restaurant);
         const query = "insert into restaurants(name, street, postal_code, city, country, image) values ($1, $2, $3, $4, $5, $6)";
         const values = [restaurant.rest_name, restaurant.street, restaurant.postal_code, restaurant.city, restaurant.country, restaurant.image ? restaurant.image : "/no_image.png"];
         try {
+            await dataStoreClient.query("BEGIN");
             await dataStoreClient.query(query, values);
+            const rest_id = await this.get_restaurant_id(restaurant);
+            if (rest_id === undefined) {
+                return [1, "Error inserting the Restaurant."];
+            }
+            const res = await this.add_keywords(keywords, rest_id); 
+            if (res[0] == 1) {
+                await dataStoreClient.query("ROLLBACK");
+                return res;
+            } else {
+                await dataStoreClient.query("COMMIT");
+                return [0, rest_id];
+            }
             return [0,0];
         } catch (e) {
+            await dataStoreClient.query("ROLLBACK");
             logger.info("adding restaurant returned error "+e);
             return [1,e];
         }
@@ -199,7 +213,7 @@ const restaurant_store = {
 
     async add_and_get_coords(restaurant) {
         try {
-            const url = "https://nominatim.openstreetmap.org/search?format=geocodejson&street="+restaurant.street.replaceAll(" ", ".")+"&city="+restaurant.city
+            const url = "https://nominatim.openstreetmap.org/search?format=geocodejson&street=" + restaurant.street.replaceAll(" ", ".") + "&city=" + restaurant.city + "&postalcode=" + restaurant.postal_code;
             logger.info(url);
             const resp = await fetch(url);
             const data = await resp.json();
