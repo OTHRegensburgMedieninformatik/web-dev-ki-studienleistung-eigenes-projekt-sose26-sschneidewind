@@ -11,7 +11,7 @@ const user_store = {
             return [0,0];
         } catch (e) {
             logger.info("adding user returned error "+e);
-            return [1, e, values];
+            return [1, e];
         }
     },
     
