@@ -61,6 +61,9 @@ const accounts = {
         if (!Object.values(user).every(value => value !== "")) {
             logger.info("Some fields were empty!")
             return response.render("signup", make_error_view_data(user, "No Field may be empty!"));
+        } else if (parseFloat(user.postal_code) <= 0) {
+            logger.info("Negative Postal code is not allowed!")
+            return response.render("signup", make_error_view_data(user, "No negative Postal Codes allowed!"));
         }
         let err_arr = await user_store.add_user(user);
         if (err_arr[0] === 0) { //if user was correctly added returns to the last url or the home if the site was directly accessed over the login page

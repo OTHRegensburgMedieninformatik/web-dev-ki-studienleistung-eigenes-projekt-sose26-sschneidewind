@@ -90,7 +90,7 @@ const restaurant_store = {
             if (response.rows[0] !== undefined) {
                 return response.rows[0].id;
             } else {
-                logger.info("Getting rest_id for restaurant "+restaurant.rest_name+" was not successfull!");
+                logger.info("Getting rest_id for restaurant "+restaurant.rest_name+" was not successful!");
                 return undefined;
             } 
         } catch(e) {

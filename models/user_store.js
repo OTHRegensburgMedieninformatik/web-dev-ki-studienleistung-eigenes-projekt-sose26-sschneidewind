@@ -119,11 +119,8 @@ const user_store = {
     async add_and_get_coords(user) {
         try {
             const url = "https://nominatim.openstreetmap.org/search?format=geocodejson&street="+user.street.replaceAll(" ", ".")+"&city="+user.city
-            logger.info(url);
             const resp = await fetch(url);
-            logger.info(resp);
             const data = await resp.json();
-            logger.info(data);
             const lat = data.features[0].geometry.coordinates[1];
             const long = data.features[0].geometry.coordinates[0];
             const query = "UPDATE users SET lat = $2, long = $3 WHERE id = $1";

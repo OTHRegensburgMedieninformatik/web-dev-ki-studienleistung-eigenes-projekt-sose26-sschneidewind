@@ -55,6 +55,12 @@ const profile = {
     let user_response = await user_store.authenticate(user.email, user.password)
     let viewData = make_view_data("Settings", request);
 
+    if (parseFloat(user.postal_code) <= 0) {
+      viewData.error = true;
+      viewData.error_msg = "Error: Negative Postal code is not allowed!";
+      return response.render("profile_settings", viewData);
+    }
+
     if (user_response === undefined) { //error regarding user authentication
       viewData.error = true;
       viewData.error_msg = "Error: password is wrong for this email!";

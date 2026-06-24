@@ -90,13 +90,15 @@ const restaurant = {
     async add_dish(request, response) {
         let rest_id = request.params.id;
         let dish = request.body;
+        dish.price = dish.price.replaceAll(",", ".");
+        let base_url = "/restaurant/" + rest_id
+        if (parseFloat(dish.price) <= 0) return response.redirect(base_url); //check that no negative value was put in
         //save the new dish into the database
         logger.info("The dish to add is:");
         logger.info(request.body);
         restaurant_store.add_dish(dish, rest_id);
         request.path = "/restaurant/"+rest_id;
         //render the same restaurant again
-        let base_url = "/restaurant/" + rest_id
         response.redirect(base_url);    
     },
 

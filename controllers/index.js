@@ -10,6 +10,8 @@ const index = {
     let dishes = await dish_store.get_top_dishes(request.session.user_id); // same as above
     restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined; //adding an extra key for each row for displaying
     dishes = dishes ? dishes.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
+    logger.info(dishes);
+
     
     //get the coordinates where the map is going to be centered around
     const resp = await fetch("https://nominatim.openstreetmap.org/search?format=geocodejson&street=Friedenstraße.17&city=Regensburg");
