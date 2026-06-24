@@ -8,7 +8,7 @@ const index = {
     logger.info("index rendering, name is: " + request.session.name);
     let restaurants = await restaurant_store.get_top_restaurants(request.session.user_id); //since session.user_id is undefined when not signed in, it automatically handles the login / not logged in distinction :)
     let dishes = await dish_store.get_top_dishes(request.session.user_id); // same as above
-    restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
+    restaurants = restaurants ? restaurants.map(row => ({...row, has_rating : row.stars !== null})) : undefined; //adding an extra key for each row for displaying
     dishes = dishes ? dishes.map(row => ({...row, has_rating : row.stars !== null})) : undefined;
     
     //get the coordinates where the map is going to be centered around
@@ -21,7 +21,7 @@ const index = {
 
     let all_restaurants = await restaurant_store.get_all_restaurants();
     for (var i = 0; i<all_restaurants.length; ++i) {
-      if ((all_restaurants[i].lat === null) || (all_restaurants[i].long === null)) {
+      if ((all_restaurants[i].lat === null) || (all_restaurants[i].long === null)) { //if the restaurant has no coords yet, add the coordinates into the database and into the object
         const coords = await restaurant_store.add_and_get_coords(all_restaurants[i]);
         all_restaurants[i] = {...all_restaurants[i], lat : coords ? coords[0] : undefined, long : coords ? coords[1] : undefined};
       }

@@ -4,7 +4,7 @@ const rest_store = require("../models/restaurant_store.js");
 
 const dishes = {
     async index(request, response) {
-        let dish_id = request.params.dish_id;
+        let dish_id = request.params.dish_id; //getting information from the request
         let rest_id = request.params.restaurant_id;
         let dish_information = await dish_store.get_dish(rest_id, dish_id);
         let dish_ratings = await dish_store.get_dish_ratings(rest_id, dish_id);
@@ -31,10 +31,12 @@ const dishes = {
         let rate_link = "/restaurant/"+rest_id+"/dish/"+dish_id+"/rate";
         request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
 
+        //check if the current restaurant is already rated
         if (request.session.rated_restaurants !== undefined) {
             rest_already_rated = request.session.rated_restaurants.includes(rest_id);
         } else rest_already_rated = false;
 
+        //check if the current dish is already rated
         if (request.session.rated_dishes !== undefined) {
             dish_already_rated = request.session.rated_dishes.some(([r_id, d_id]) => r_id == rest_id && d_id == dish_id);
         } else dish_already_rated = false;
@@ -42,8 +44,8 @@ const dishes = {
         const dish_ratings_exist = dish_ratings !== undefined;
         const rest_ratings_exist = rest_ratings !== undefined;
 
-        const dish_rateable = request.session.rated_dishes ? !request.session.rated_dishes.some(([r_id, d_id]) => rest_id == r_id && dish_id == d_id): false;
-        const rest_rateable = request.session.rated_restaurants ? !request.session.rated_restaurants.includes(parseInt(rest_id)) : false;
+        const dish_rateable = request.session.rated_dishes ? !dish_already_rated: false;
+        const rest_rateable = request.session.rated_restaurants ? !rest_already_rated : false;
 
         const viewData = {
             //basic information concerning dish
@@ -74,7 +76,6 @@ const dishes = {
             name: request.session.name,
             surname: request.session.surname,
         }
-        logger.info(request.session.rated_dishes);
         response.render("dish", viewData);
     },
 
@@ -97,16 +98,17 @@ const dishes = {
         const rest_id = request.params.restaurant_id;
         const dish_id = request.params.dish_id;
         logger.info("Deleting rating for restaurant "+rest_id+ " and dish "+dish_id);
-        if (parseInt(user_id) !== request.session.user_id) { //if user a tries to delete a rating of user b
+        if (parseInt(user_id) !== request.session.user_id) { //if user x tries to delete a rating of user y since it is only handled over URL
             return response.redirect("/");
         }
         
         const resp = await dish_store.delete_rating(user_id, rest_id, dish_id);
         if (resp[0] === 0) {
+            //remove the deleted rating from the rated dishes array of the session
             request.session.rated_dishes = request.session.rated_dishes.filter(([r_id, d_id]) => !(parseInt(r_id) === parseInt(rest_id) && parseInt(d_id) === parseInt(dish_id)));
         } else {
             logger.info("There was an error:");
-            logger.info(resp[1])
+            logger.info(resp[1]);
         }
         logger.info(request.session.rated_dishes);
         response.redirect("/profile");

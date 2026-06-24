@@ -1,6 +1,6 @@
 const logger = require("../utils/logger.js");
 const restaurant_store = require("../models/restaurant_store.js");
-const helper = require("../utils/controller_helper.js");
+const helper = require("../utils/helpers.js");
 
 const restaurant = {
     async index(request, response){
@@ -26,7 +26,7 @@ const restaurant = {
             dishes.map(row => //go over each row
                 ({ ...row, //get all the parameters of the row
                     dish_ratable : request.session.rated_dishes !== undefined ?  //add a new parameter called dish_ratable which is false if rated_dishes of the session is undefined
-                        !(request.session.rated_dishes.some(([r_id, d_id]) => r_id == row.r_id && d_id == row.d_id)) //evaluate if there is a r_id d_id combo inside rated dishes
+                        !(request.session.rated_dishes.some(([r_id, d_id]) => r_id == row.r_id && d_id == row.d_id)) //evaluate if there is a r_id d_id combo inside rated dishes (if the dish is already rated or can be rated)
                         : false
                 })
             ) : [];
@@ -120,6 +120,13 @@ const restaurant = {
             surname: request.session.surname
         };
         logger.info(keywords);
+        if (!Object.values(restaurant).every(value => value !== "")) { //check if all fields were filled out
+            logger.info("Some fields were empty!");
+            viewData.error = true;            
+            viewData.error_msg = "No Fields may be empty!";
+            return response.render("add_restaurant", viewData);
+        }
+
         if (keywords.length < 3) { //not enough keywords provided
             viewData.error = true;
             viewData.error_msg = "Error: Please insert at least 3 Keywords!";        

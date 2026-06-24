@@ -47,7 +47,7 @@ const user_store = {
     },
 
     async get_user_dish_or_restaurant_ratings(user_id, get_dish) {
-        let dish_query = "select dishes.r_id as rest_id, dishes.d_id as dish_id, stars, text as string, time, restaurants.name as restaurant, dishes.name as dish from dish_ratings join dishes on (dish_ratings.d_id = dishes.d_id) and (dish_ratings.r_id = dishes.r_id) join restaurants on dish_ratings.r_id = restaurants.id where u_id=$1;" //funny double join to get the name of the restaurant as well as the name of the dish as both are stored in different tables
+        let dish_query = "select dishes.r_id as rest_id, dishes.d_id as dish_id, stars, text as string, time, restaurants.name as restaurant, dishes.name as dish from dish_ratings join dishes on (dish_ratings.d_id = dishes.d_id) and (dish_ratings.r_id = dishes.r_id) join restaurants on dish_ratings.r_id = restaurants.id where u_id=$1;" //double join to get the name of the restaurant as well as the name of the dish as both are stored in different tables
         let rest_query = "select r_id as rest_id, stars, text as string, time, name as restaurant from restaurant_ratings join restaurants on restaurant_ratings.r_id = restaurants.id where u_id=$1"
         const query = get_dish ? dish_query : rest_query;
         const values = [user_id];

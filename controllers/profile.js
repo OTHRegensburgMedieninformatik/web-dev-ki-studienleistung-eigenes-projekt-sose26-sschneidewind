@@ -54,6 +54,7 @@ const profile = {
     logger.info(user);
     let user_response = await user_store.authenticate(user.email, user.password)
     let viewData = make_view_data("Settings", request);
+
     if (user_response === undefined) { //error regarding user authentication
       viewData.error = true;
       viewData.error_msg = "Error: password is wrong for this email!";
@@ -64,7 +65,7 @@ const profile = {
         viewData.error = true;
         viewData.error_msg = change_response[1];
         response.render("profile_settings", viewData);
-      } else {
+      } else { //update the session data only if the databse change was successfull
         await update_data(request, user);
         let viewData = make_view_data("Settings", request);
         response.render("profile_settings", viewData);
