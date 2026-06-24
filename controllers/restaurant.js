@@ -72,13 +72,18 @@ const restaurant = {
         //persist the rating into the database
         let rest_id = request.params.id;
         let rating = request.body;
+        let base_url = "/restaurant/" + rest_id;
         logger.info("The rating to add is:")
         logger.info(rating);
+
+        if (rating.number_of_stars === undefined) { //if no stars were selected or something went wrong, let them try again from the base site
+            return response.redirect(base_url);
+        }
+
         restaurant_store.rate_restaurant(request.session.user_id, rest_id, rating);
         //add the rated restaurant into the currently rated restaurants so we do not have to do another database query
         request.session.rated_restaurants.push(parseInt(rest_id)); //set current restaurant rated to true
         //render same restaurant again
-        let base_url = "/restaurant/" + rest_id;
         response.redirect(base_url);
     },
 
@@ -119,7 +124,6 @@ const restaurant = {
             name: request.session.name,
             surname: request.session.surname
         };
-        logger.info(keywords);
         if (!Object.values(restaurant).every(value => value !== "")) { //check if all fields were filled out
             logger.info("Some fields were empty!");
             viewData.error = true;            

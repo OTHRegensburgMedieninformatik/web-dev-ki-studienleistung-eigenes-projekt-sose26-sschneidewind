@@ -112,10 +112,14 @@
 
     const restaurants = {{{all_restaurants}}};
     let rest_marker_arr = [];
+    let curr_ind = 0;
     for (var i = 0; i<restaurants.length; ++i) {
       console.log(restaurants[i])
-      rest_marker_arr.push(L.marker([parseFloat(restaurants[i].lat), parseFloat(restaurants[i].long)]).addTo(map));
-      rest_marker_arr[i].bindPopup("<a href='/restaurant/"+restaurants[i].id+"'>"+restaurants[i].name+"</a>")
+      if (restaurants[i].long && restaurants[i].lat) { //error handling if theoretically no coordinates where found for the restaurant
+        rest_marker_arr.push(L.marker([parseFloat(restaurants[i].lat), parseFloat(restaurants[i].long)]).addTo(map));
+        rest_marker_arr[curr_ind].bindPopup("<a href='/restaurant/"+restaurants[i].id+"'>"+restaurants[i].name+"</a>")
+        curr_ind += 1;
+      }
     }
   </script>
 

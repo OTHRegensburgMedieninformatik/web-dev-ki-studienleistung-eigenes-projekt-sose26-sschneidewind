@@ -25,9 +25,6 @@ const dishes = {
         if (dish_information === undefined || rest_information === undefined)
             response.redirect("/");
 
-        logger.info("INFO")
-        logger.info(dish_ratings)
-        logger.info(rest_ratings)
         let rate_link = "/restaurant/"+rest_id+"/dish/"+dish_id+"/rate";
         request.session.last_url = "restaurant/"+rest_id+"/dish/"+dish_id;
 
@@ -83,10 +80,14 @@ const dishes = {
         let dish_id = request.params.dish_id;
         let rest_id = request.params.restaurant_id;
         let base_url = "/restaurant/"+rest_id+"/dish/"+dish_id
-
         let rating = request.body;
         logger.info("The rating to add is:")
         logger.info(rating);
+
+        if (rating.number_of_stars === undefined) { //if no stars were selected or something went wrong, let them try again from the base site
+            return response.redirect(base_url);
+        }
+
         dish_store.rate_dish(request.session.user_id, rest_id, dish_id, rating)
         request.session.rated_dishes.push([rest_id, dish_id]);
 
